@@ -1,0 +1,10 @@
+[10-Apr-2024 06:14:09 UTC] PHP Warning:  require(/home/binamuda/public_html/onedream.id/../../onedream_laravel/vendor/autoload.php): Failed to open stream: No such file or directory in /home/binamuda/public_html/onedream.id/index.php on line 24
+[10-Apr-2024 06:14:09 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/binamuda/public_html/onedream.id/../../onedream_laravel/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/binamuda/public_html/onedream.id/index.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/binamuda/public_html/onedream.id/index.php on line 24
+[12-Apr-2024 15:43:30 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/binamuda/onedream_laravel/app/Models/Invoice.php on line 3
+[14-Apr-2024 03:24:45 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/binamuda/onedream_laravel/app/Filament/Resources/InvoiceResource.php on line 4
+[14-Apr-2024 03:25:03 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/binamuda/onedream_laravel/app/Filament/Resources/InvoiceResource.php on line 4
+[14-Apr-2024 03:25:30 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/binamuda/onedream_laravel/app/Filament/Resources/InvoiceResource.php on line 4
+[14-Apr-2024 03:26:17 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/binamuda/onedream_laravel/app/Filament/Resources/InvoiceResource.php on line 4
