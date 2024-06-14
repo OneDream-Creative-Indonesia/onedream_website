@@ -44,9 +44,6 @@ Route::get('/storage-link',function(){
     symlink($targetFolder,$linkFolder);
 });
 
-Route::get('/ticketing/forms', \App\Livewire\TicketingForms::class)->name('ticketing-forms');
-Route::post('/ticketing/forms', \App\Livewire\TicketingForms::class)->name('ticketing-forms');
-
 Route::middleware(['filament-auth'])->group(function () {
     Route::get('/task', [toolLendingController::class, 'index']);
     Route::post('/task', [ToolLendingController::class, 'store']);
