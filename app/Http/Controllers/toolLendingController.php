@@ -34,7 +34,7 @@ class toolLendingController extends Controller
         $task->save();
         return response()->json(['success' => true]);
     }
-    
+
       public function edit($id)
     {
         return redirect()->route('toolLending.edit', ['id' => $id]);

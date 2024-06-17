@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Task Management</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link href="./output.css" rel="stylesheet">
@@ -35,7 +35,7 @@
         $(function() {
             $(".task").click(function() {
                 var taskId = $(this).attr("id");
-                var editUrl = "{{ route('toolLending.edit', ['id' => '__taskId__']) }}";
+                var editUrl = "<?php echo e(route('toolLending.edit', ['id' => '__taskId__'])); ?>";
                 editUrl = editUrl.replace('__taskId__', taskId);
                 window.location.href = editUrl;
             });
@@ -83,35 +83,36 @@
 <div id="task-container"  class="flex grid flex-wrap justify-around grid-cols-12 md:grid-cols-3 sm:gap-3">
     <div id="todo" class="w-full p-4 dropzone md:w-1/3" data-status="todo">
         <h3 class="w-full mb-2 text-lg font-bold" style="margin-left: 10px; color:  rgb(36, 36, 36);">Dalam Antrian</h3>
-        @foreach($tasks['todo'] as $task)
-            <div id="{{ $task->id }}" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="{{ $task->status }}">
-                <p class="font-semibold tag">Nama Barang: {{ $task->nama_barang }}</p>
-                <p class="text-sm tag">Tanggal Pinjam: {{ $task->tanggal_pinjam }}</p>
-                <p class="text-sm tag">Tanggal Selesai: {{ $task->tanggal_kembali }}</p>
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $tasks['todo']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div id="<?php echo e($task->id); ?>" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="<?php echo e($task->status); ?>">
+                <p class="font-semibold tag">Nama Barang: <?php echo e($task->nama_barang); ?></p>
+                <p class="text-sm tag">Tanggal Pinjam: <?php echo e($task->tanggal_pinjam); ?></p>
+                <p class="text-sm tag">Tanggal Selesai: <?php echo e($task->tanggal_kembali); ?></p>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
     </div>
     <div id="in-progress" class="w-full p-4 dropzone" data-status="in_progress">
         <h3 class="w-full mb-2 text-lg font-bold" style="margin-left: 10px;color: rgb(36, 36, 36);">Di Pinjam</h3>
-        @foreach($tasks['in_progress'] as $task)
-        <div id="{{ $task->id }}" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="{{ $task->status }}">
-                <p class="font-semibold tag">Nama Barang: {{ $task->nama_barang }}</p>
-                <p class="text-sm tag">Tanggal Pinjam: {{ $task->tanggal_pinjam }}</p>
-                <p class="text-sm tag">Tanggal Selesai: {{ $task->tanggal_kembali }}</p>
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $tasks['in_progress']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div id="<?php echo e($task->id); ?>" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="<?php echo e($task->status); ?>">
+                <p class="font-semibold tag">Nama Barang: <?php echo e($task->nama_barang); ?></p>
+                <p class="text-sm tag">Tanggal Pinjam: <?php echo e($task->tanggal_pinjam); ?></p>
+                <p class="text-sm tag">Tanggal Selesai: <?php echo e($task->tanggal_kembali); ?></p>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
     </div>
     <div id="done" class="w-full p-4 dropzone" data-status="done">
         <h3 class="w-full mb-2 text-lg font-bold" style="margin-left: 10px;color:  rgb(36, 36, 36);">Selesai</h3>
-        @foreach($tasks['done'] as $task)
-        <div id="{{ $task->id }}" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="{{ $task->status }}">
-                <p class="font-semibold tag">Nama Barang: {{ $task->nama_barang }}</p>
-                <p class="text-sm tag">Tanggal Pinjam: {{ $task->tanggal_pinjam }}</p>
-                <p class="text-sm tag">Tanggal Selesai: {{ $task->tanggal_kembali }}</p>
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $tasks['done']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div id="<?php echo e($task->id); ?>" class="p-4 mb-4 bg-white rounded-lg shadow-md task ui-widget-content" data-status="<?php echo e($task->status); ?>">
+                <p class="font-semibold tag">Nama Barang: <?php echo e($task->nama_barang); ?></p>
+                <p class="text-sm tag">Tanggal Pinjam: <?php echo e($task->tanggal_pinjam); ?></p>
+                <p class="text-sm tag">Tanggal Selesai: <?php echo e($task->tanggal_kembali); ?></p>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
     </div>
 
 </div>
 
 
+<?php /**PATH C:\xampp\htdocs\onedream_website\resources\views/tasks.blade.php ENDPATH**/ ?>

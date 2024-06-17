@@ -19,11 +19,11 @@ class InvoiceController extends Controller
             // Handle error jika file tidak ditemukan
             abort(404);
         }
-    
+
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         $imageData = base64_encode(file_get_contents($path));
         $imageDataUri = 'data:image/' . $extension . ';base64,' . $imageData;
-    
+
         $invoice = Invoice::findOrFail($id);
         $pdf = PDF::loadView('invoices.invoice', compact('invoice', 'imageDataUri'));
         $pdf->setPaper('A4', 'portrait');
