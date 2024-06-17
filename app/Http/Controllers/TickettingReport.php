@@ -16,7 +16,7 @@ class TickettingReport extends Controller
 
         $reports = Ticketing::all();
         foreach ($reports as $report) {
-            $noPhoto = $report->no_photo == null ? $report->no_photo : '-';
+            $noPhoto = $report->no_photo == null ? '-' : $report->no_photo;
 
             $csv->insertOne([
                 $report->nama,
