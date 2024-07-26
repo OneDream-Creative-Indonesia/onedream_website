@@ -2,8 +2,6 @@
 
 namespace Filament\Infolists;
 
-use Filament\Infolists\Testing\TestsActions;
-use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -16,11 +14,6 @@ class InfolistsServiceProvider extends PackageServiceProvider
             ->hasCommands($this->getCommands())
             ->hasTranslations()
             ->hasViews();
-    }
-
-    public function packageBooted(): void
-    {
-        Testable::mixin(new TestsActions());
     }
 
     /**

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->string('finance_type');
-            $table->decimal('masuk', 65, 2)->nullable();
-            $table->decimal('keluar', 65, 2)->nullable();
-            $table->decimal('total', 65, 2);
+            $table->unsignedBigInteger('masuk')->nullable();
+            $table->unsignedBigInteger('keluar')->nullable();
+            $table->unsignedBigInteger('total');
             $table->string('description');
             $table->timestamps();
         });

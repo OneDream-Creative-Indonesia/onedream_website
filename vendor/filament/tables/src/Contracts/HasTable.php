@@ -12,9 +12,8 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 interface HasTable
 {
@@ -38,7 +37,7 @@ interface HasTable
      */
     public function getTableFilterState(string $name): ?array;
 
-    public function getSelectedTableRecords(bool $shouldFetchSelectedRecords = true): EloquentCollection | Collection;
+    public function getSelectedTableRecords(): Collection;
 
     public function parseTableFilterName(string $name): string;
 
@@ -60,7 +59,7 @@ interface HasTable
 
     public function getTableFiltersForm(): Form;
 
-    public function getTableRecords(): EloquentCollection | Paginator | CursorPaginator;
+    public function getTableRecords(): Collection | Paginator | CursorPaginator;
 
     public function getTableRecordsPerPage(): int | string | null;
 
@@ -106,8 +105,6 @@ interface HasTable
     public function getFilteredTableQuery(): Builder;
 
     public function getFilteredSortedTableQuery(): Builder;
-
-    public function getTableQueryForExport(): Builder;
 
     public function makeFilamentTranslatableContentDriver(): ?TranslatableContentDriver;
 

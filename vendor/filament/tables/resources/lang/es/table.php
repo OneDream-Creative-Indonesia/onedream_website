@@ -113,10 +113,6 @@ return [
 
         'actions' => [
 
-            'apply' => [
-                'label' => 'Aplicar filtros',
-            ],
-
             'remove' => [
                 'label' => 'Quitar filtro',
             ],

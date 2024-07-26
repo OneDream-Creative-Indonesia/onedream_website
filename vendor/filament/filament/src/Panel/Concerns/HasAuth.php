@@ -66,13 +66,9 @@ trait HasAuth
 
     protected ?string $profilePage = null;
 
-    protected bool $isProfilePageSimple = true;
-
     protected string $authGuard = 'web';
 
     protected ?string $authPasswordBroker = null;
-
-    protected bool | Closure $arePasswordsRevealable = true;
 
     /**
      * @param  string | Closure | array<class-string, string> | null  $promptAction
@@ -187,17 +183,9 @@ trait HasAuth
         return $this;
     }
 
-    public function profile(?string $page = EditProfile::class, bool $isSimple = true): static
+    public function profile(?string $page = EditProfile::class): static
     {
         $this->profilePage = $page;
-        $this->simpleProfilePage($isSimple);
-
-        return $this;
-    }
-
-    public function simpleProfilePage(bool $condition = true): static
-    {
-        $this->isProfilePageSimple = $condition;
 
         return $this;
     }
@@ -234,11 +222,6 @@ trait HasAuth
     public function getProfilePage(): ?string
     {
         return $this->profilePage;
-    }
-
-    public function isProfilePageSimple(): bool
-    {
-        return $this->isProfilePageSimple;
     }
 
     /**
@@ -463,17 +446,5 @@ trait HasAuth
     public function getAuthPasswordBroker(): ?string
     {
         return $this->authPasswordBroker;
-    }
-
-    public function revealablePasswords(bool | Closure $condition = true): static
-    {
-        $this->arePasswordsRevealable = $condition;
-
-        return $this;
-    }
-
-    public function arePasswordsRevealable(): bool
-    {
-        return (bool) $this->evaluate($this->arePasswordsRevealable);
     }
 }

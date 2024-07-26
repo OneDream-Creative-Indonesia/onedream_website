@@ -2,8 +2,8 @@
     $user = filament()->auth()->user();
 @endphp
 
-<x-filament-widgets::widget class="fi-account-widget ">
-    <x-filament::section class="py-4">
+<x-filament-widgets::widget class="fi-account-widget">
+    <x-filament::section>
         <div class="flex items-center gap-x-3">
             <x-filament-panels::avatar.user size="lg" :user="$user" />
 

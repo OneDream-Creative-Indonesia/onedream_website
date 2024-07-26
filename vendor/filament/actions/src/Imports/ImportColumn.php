@@ -5,7 +5,6 @@ namespace Filament\Actions\Imports;
 use Closure;
 use Filament\Forms\Components\Select;
 use Filament\Support\Components\Component;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -53,8 +52,6 @@ class ImportColumn extends Component
 
     protected mixed $example = null;
 
-    protected string | Closure | null $exampleHeader = null;
-
     protected string | Closure | null $relationship = null;
 
     /**
@@ -68,10 +65,6 @@ class ImportColumn extends Component
     protected array $resolvedRelatedRecords = [];
 
     protected string | Closure | null $validationAttribute = null;
-
-    protected string $evaluationIdentifier = 'column';
-
-    protected string | Htmlable | Closure | null $helperText = null;
 
     final public function __construct(string $name)
     {
@@ -91,8 +84,7 @@ class ImportColumn extends Component
         return Select::make($this->getName())
             ->label($this->getLabel())
             ->placeholder(__('filament-actions::import.modal.form.columns.placeholder'))
-            ->required($this->isMappingRequired())
-            ->helperText($this->helperText);
+            ->required($this->isMappingRequired());
     }
 
     public function name(string $name): static
@@ -116,13 +108,6 @@ class ImportColumn extends Component
         return $this;
     }
 
-    public function exampleHeader(string | Closure | null $header): static
-    {
-        $this->exampleHeader = $header;
-
-        return $this;
-    }
-
     public function requiredMapping(bool | Closure $condition = true): static
     {
         $this->isMappingRequired = $condition;
@@ -134,13 +119,6 @@ class ImportColumn extends Component
     {
         $this->isNumeric = $condition;
         $this->decimalPlaces = $decimalPlaces;
-
-        return $this;
-    }
-
-    public function helperText(string | Htmlable | Closure | null $text): static
-    {
-        $this->helperText = $text;
 
         return $this;
     }
@@ -216,16 +194,9 @@ class ImportColumn extends Component
     public function getGuesses(): array
     {
         $guesses = $this->evaluate($this->guesses);
-
         array_unshift($guesses, $this->getName());
 
-        if (filled($label = $this->getLabel())) {
-            array_unshift($guesses, $this->getLabel());
-        }
-
         return array_reduce($guesses, function (array $carry, string $guess): array {
-            $carry[] = Str::lower($guess);
-
             $guess = (string) str($guess)
                 ->lower()
                 ->replace('-', ' ')
@@ -308,11 +279,6 @@ class ImportColumn extends Component
         return $this->name;
     }
 
-    public function getExampleHeader(): string
-    {
-        return $this->evaluate($this->exampleHeader) ?? $this->getName();
-    }
-
     /**
      * @return array<mixed>
      */
@@ -332,7 +298,7 @@ class ImportColumn extends Component
                     return;
                 }
 
-                $fail('validation.exists')->translate();
+                $fail(__('validation.exists', ['attribute' => $attribute]));
             };
         }
 
@@ -466,7 +432,7 @@ class ImportColumn extends Component
 
     public function getRecord(): ?Model
     {
-        return $this->getImporter()?->getRecord();
+        return $this->getImporter()->getRecord();
     }
 
     public function isMappingRequired(): bool
@@ -531,7 +497,7 @@ class ImportColumn extends Component
 
     protected function castNumericStateItem(mixed $state): int | float
     {
-        $state = floatval(preg_replace('/[^0-9.-]/', '', $state));
+        $state = floatval(preg_replace('/[^0-9.]/', '', $state));
 
         $decimalPlaces = $this->getDecimalPlaces();
 

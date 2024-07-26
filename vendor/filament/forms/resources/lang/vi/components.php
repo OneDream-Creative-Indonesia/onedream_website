@@ -419,31 +419,6 @@ return [
         'placeholder' => 'Thêm thẻ mới',
     ],
 
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Ẩn mật khẩu',
-            ],
-
-            'show_password' => [
-                'label' => 'Hiện mật khẩu',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Có',
-            'false' => 'Không',
-        ],
-
-    ],
-
     'wizard' => [
 
         'actions' => [

@@ -6,7 +6,6 @@
     'recordAction' => null,
     'recordKey' => null,
     'recordUrl' => null,
-    'shouldOpenRecordUrlInNewTab' => false,
 ]) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
@@ -17,7 +16,6 @@
     'recordAction' => null,
     'recordKey' => null,
     'recordUrl' => null,
-    'shouldOpenRecordUrlInNewTab' => false,
 ]); ?>
 <?php foreach (array_filter(([
     'column',
@@ -26,7 +24,6 @@
     'recordAction' => null,
     'recordKey' => null,
     'recordUrl' => null,
-    'shouldOpenRecordUrlInNewTab' => false,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
@@ -79,7 +76,7 @@
 >
     <!--[if BLOCK]><![endif]--><?php if(($url || ($recordUrl && $action === null)) && (! $isClickDisabled)): ?>
         <a
-            <?php echo e(\Filament\Support\generate_href_html($url ?: $recordUrl, $url ? $shouldOpenUrlInNewTab : $shouldOpenRecordUrlInNewTab)); ?>
+            <?php echo e(\Filament\Support\generate_href_html($url ?: $recordUrl, $shouldOpenUrlInNewTab)); ?>
 
             class="<?php echo e($columnClasses); ?>"
         >

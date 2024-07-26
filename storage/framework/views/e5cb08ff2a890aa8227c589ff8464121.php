@@ -12,7 +12,7 @@
     $items = \Illuminate\Support\Arr::except($items, ['account', 'logout', 'profile']);
 ?>
 
-<?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::USER_MENU_BEFORE)); ?>
+<?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::user-menu.before')); ?>
 
 
 <?php if (isset($component)) { $__componentOriginal22ab0dbc2c6619d5954111bba06f01db = $component; } ?>
@@ -61,7 +61,7 @@
      <?php $__env->endSlot(); ?>
 
     <?php if($profileItem?->isVisible() ?? true): ?>
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::USER_MENU_PROFILE_BEFORE)); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::user-menu.profile.before')); ?>
 
 
         <?php if($hasProfileItem): ?>
@@ -132,7 +132,7 @@
 <?php endif; ?>
         <?php endif; ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::USER_MENU_PROFILE_AFTER)); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::user-menu.profile.after')); ?>
 
     <?php endif; ?>
 
@@ -190,20 +190,16 @@
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
         <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php
-                $itemPostAction = $item->getPostAction();
-            ?>
-
             <?php if (isset($component)) { $__componentOriginal1bd4d8e254cc40cdb05bd99df3e63f78 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal1bd4d8e254cc40cdb05bd99df3e63f78 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.dropdown.list.item','data' => ['action' => $itemPostAction,'color' => $item->getColor(),'href' => $item->getUrl(),'icon' => $item->getIcon(),'method' => filled($itemPostAction) ? 'post' : null,'tag' => filled($itemPostAction) ? 'form' : 'a','target' => $item->shouldOpenUrlInNewTab() ? '_blank' : null]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.dropdown.list.item','data' => ['color' => $item->getColor(),'href' => $item->getUrl(),'target' => $item->shouldOpenUrlInNewTab() ? '_blank' : null,'icon' => $item->getIcon(),'tag' => 'a']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('filament::dropdown.list.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['action' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($itemPostAction),'color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getColor()),'href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getUrl()),'icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getIcon()),'method' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(filled($itemPostAction) ? 'post' : null),'tag' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(filled($itemPostAction) ? 'form' : 'a'),'target' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->shouldOpenUrlInNewTab() ? '_blank' : null)]); ?>
+<?php $component->withAttributes(['color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getColor()),'href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getUrl()),'target' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->shouldOpenUrlInNewTab() ? '_blank' : null),'icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($item->getIcon()),'tag' => 'a']); ?>
                 <?php echo e($item->getLabel()); ?>
 
              <?php echo $__env->renderComponent(); ?>
@@ -261,6 +257,6 @@
 <?php unset($__componentOriginal22ab0dbc2c6619d5954111bba06f01db); ?>
 <?php endif; ?>
 
-<?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::USER_MENU_AFTER)); ?>
+<?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::user-menu.after')); ?>
 
 <?php /**PATH C:\xampp\htdocs\onedream_website\vendor\filament\filament\src\/../resources/views/components/user-menu.blade.php ENDPATH**/ ?>

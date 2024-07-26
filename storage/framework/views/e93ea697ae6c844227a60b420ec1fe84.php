@@ -60,7 +60,7 @@ $__split = function ($name, $params = []) {
     return [$name, $params];
 };
 [$__name, $__params] = $__split($widgetClass,
-            [...(($widget instanceof \Filament\Widgets\WidgetConfiguration) ? [...$widget->widget::getDefaultProperties(), ...$widget->getProperties()] : $widget::getDefaultProperties()), ...$data],);
+            [...(($widget instanceof \Filament\Widgets\WidgetConfiguration) ? [...$widget->widget::getDefaultProperties(), ...$widget->properties] : $widget::getDefaultProperties()), ...$data],);
 
 $__html = app('livewire')->mount($__name, $__params, "{$widgetClass}-{$widgetKey}", $__slots ?? [], get_defined_vars());
 

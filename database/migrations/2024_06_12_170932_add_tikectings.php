@@ -1,5 +1,4 @@
-
-//Nama, Kelas, Nomor Telpon, Dropdown tulisannya Pembayaran Isinya (Tunai, QRIS)<?php
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

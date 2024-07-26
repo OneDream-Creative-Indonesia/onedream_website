@@ -92,10 +92,6 @@ trait InteractsWithTable
 
         $this->getTableFiltersForm()->fill($this->tableFilters);
 
-        if ($this->getTable()->hasDeferredFilters()) {
-            $this->tableFilters = $this->tableDeferredFilters;
-        }
-
         if ($shouldPersistFiltersInSession) {
             session()->put(
                 $filtersSessionKey,

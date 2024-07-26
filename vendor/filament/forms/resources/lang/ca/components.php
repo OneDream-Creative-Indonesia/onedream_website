@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'builder' => [
 
         'actions' => [
@@ -59,11 +58,11 @@ return [
         'actions' => [
 
             'deselect_all' => [
-                'label' => 'Desseleccionar tots',
+                'label' => 'Deseleccionar tot',
             ],
 
             'select_all' => [
-                'label' => 'Seleccionar tots',
+                'label' => 'Seleccionar tot',
             ],
 
         ],
@@ -81,11 +80,11 @@ return [
                 ],
 
                 'drag_crop' => [
-                    'label' => 'Mode d\'arrossegament "retallar"',
+                    'label' => `Mode d'arrossegament "retallar"`,
                 ],
 
                 'drag_move' => [
-                    'label' => 'Mode d\'arrossegament "moure"',
+                    'label' => `Mode d'arrossegament "moure"`,
                 ],
 
                 'flip_horizontal' => [
@@ -155,7 +154,7 @@ return [
 
                 'rotation' => [
                     'label' => 'Rotació',
-                    'unit' => 'graus',
+                    'unit' => 'deg',
                 ],
 
                 'width' => [
@@ -246,15 +245,6 @@ return [
             'strike' => 'Ratllat',
             'table' => 'Taula',
             'undo' => 'Desfer',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Sí',
-            'false' => 'No',
         ],
 
     ],
@@ -358,7 +348,7 @@ return [
 
                 'modal' => [
 
-                    'heading' => 'Nou',
+                    'heading' => 'Crear',
 
                     'actions' => [
 
@@ -367,7 +357,7 @@ return [
                         ],
 
                         'create_another' => [
-                            'label' => 'Crear i crear-ne un altre',
+                            'label' => 'Crear i crear un altre',
                         ],
 
                     ],
@@ -397,7 +387,7 @@ return [
         ],
 
         'boolean' => [
-            'true' => 'Sí',
+            'true' => 'Si',
             'false' => 'No',
         ],
 
@@ -417,31 +407,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Nova etiqueta',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Ocultar contrasenya',
-            ],
-
-            'show_password' => [
-                'label' => 'Mostrar contrasenya',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Sí',
-            'false' => 'No',
-        ],
-
     ],
 
     'wizard' => [

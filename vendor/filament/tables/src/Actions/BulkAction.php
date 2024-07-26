@@ -3,16 +3,16 @@
 namespace Filament\Tables\Actions;
 
 use Closure;
+use Filament\Actions\Contracts\Groupable;
 use Filament\Actions\MountableAction;
 use Filament\Tables\Actions\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
-class BulkAction extends MountableAction implements HasTable
+class BulkAction extends MountableAction implements Groupable, HasTable
 {
     use Concerns\BelongsToTable;
     use Concerns\CanDeselectRecordsAfterCompletion;
-    use Concerns\CanFetchSelectedRecords;
     use Concerns\InteractsWithRecords;
 
     protected function setUp(): void
@@ -30,7 +30,7 @@ class BulkAction extends MountableAction implements HasTable
     public function call(array $parameters = []): mixed
     {
         try {
-            return parent::call($parameters);
+            return $this->evaluate($this->getActionFunction(), $parameters);
         } finally {
             if ($this->shouldDeselectRecordsAfterCompletion()) {
                 $this->getLivewire()->deselectAllTableRecords();
@@ -56,7 +56,7 @@ class BulkAction extends MountableAction implements HasTable
 
     public function getAlpineClickHandler(): ?string
     {
-        return parent::getAlpineClickHandler() ?? "mountBulkAction('{$this->getName()}')";
+        return "mountBulkAction('{$this->getName()}')";
     }
 
     public function getLivewireTarget(): ?string
@@ -82,7 +82,8 @@ class BulkAction extends MountableAction implements HasTable
     protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
     {
         return match ($parameterType) {
-            EloquentCollection::class, Collection::class => [$this->getRecords()],
+            Collection::class => [$this->getRecords()],
+            EloquentCollection::class => [$this->getRecords()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
         };
     }

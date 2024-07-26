@@ -5,7 +5,6 @@ namespace Filament\Tables\Table\Concerns;
 use Closure;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\Column;
-use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as ColumnLayoutComponent;
 use InvalidArgumentException;
 
@@ -17,18 +16,16 @@ trait HasColumns
     protected array $columns = [];
 
     /**
-     * @var array<Column | ColumnLayoutComponent | ColumnGroup>
+     * @var array<Column | ColumnLayoutComponent>
      */
     protected array $columnsLayout = [];
 
     protected ?ColumnLayoutComponent $collapsibleColumnsLayout = null;
 
-    protected bool $hasColumnGroups = false;
-
     protected bool $hasColumnsLayout = false;
 
     /**
-     * @param  array<Column | ColumnLayoutComponent | ColumnGroup>  $components
+     * @param  array<Column | ColumnLayoutComponent>  $components
      */
     public function columns(array $components): static
     {
@@ -42,7 +39,7 @@ trait HasColumns
     }
 
     /**
-     * @param  array<Column | ColumnLayoutComponent | ColumnGroup>  $components
+     * @param  array<Column | ColumnLayoutComponent>  $components
      */
     public function pushColumns(array $components): static
     {
@@ -55,29 +52,18 @@ trait HasColumns
                 $this->columnsLayout[] = $component;
             }
 
-            if ($component instanceof ColumnGroup) {
-                $this->hasColumnGroups = true;
-
-                $this->columns = [
-                    ...$this->columns,
-                    ...$component->getColumns(),
-                ];
+            if ($component instanceof Column) {
+                $this->columns[$component->getName()] = $component;
 
                 continue;
             }
 
-            if ($component instanceof ColumnLayoutComponent) {
-                $this->hasColumnsLayout = true;
+            $this->hasColumnsLayout = true;
 
-                $this->columns = [
-                    ...$this->columns,
-                    ...$component->getColumns(),
-                ];
-
-                continue;
-            }
-
-            $this->columns[$component->getName()] = $component;
+            $this->columns = [
+                ...$this->columns,
+                ...$component->getColumns(),
+            ];
         }
 
         foreach ($this->columns as $column) {
@@ -126,7 +112,7 @@ trait HasColumns
     }
 
     /**
-     * @return array<Column | ColumnLayoutComponent | ColumnGroup>
+     * @return array<Column | ColumnLayoutComponent>
      */
     public function getColumnsLayout(): array
     {
@@ -136,11 +122,6 @@ trait HasColumns
     public function getCollapsibleColumnsLayout(): ?ColumnLayoutComponent
     {
         return $this->collapsibleColumnsLayout;
-    }
-
-    public function hasColumnGroups(): bool
-    {
-        return $this->hasColumnGroups;
     }
 
     public function hasColumnsLayout(): bool

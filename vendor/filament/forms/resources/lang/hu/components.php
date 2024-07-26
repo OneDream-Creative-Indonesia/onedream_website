@@ -419,31 +419,6 @@ return [
         'placeholder' => 'Címke hozzáadása',
     ],
 
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Jelszó elrejtése',
-            ],
-
-            'show_password' => [
-                'label' => 'Jelszó megjelenítése',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Igen',
-            'false' => 'Nem',
-        ],
-
-    ],
-
     'wizard' => [
 
         'actions' => [

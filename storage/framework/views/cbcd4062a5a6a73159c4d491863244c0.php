@@ -14,10 +14,39 @@
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['livewire' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($livewire)]); ?>
-    
-    <div
-        class="fi-layout flex min-h-screen w-full flex-row-reverse overflow-x-clip"
-    >
+    <div class="fi-layout flex min-h-screen w-full overflow-x-clip">
+        <?php if(filament()->hasNavigation()): ?>
+            <div
+                x-cloak
+                x-data="{}"
+                x-on:click="$store.sidebar.close()"
+                x-show="$store.sidebar.isOpen"
+                x-transition.opacity.300ms
+                class="fi-sidebar-close-overlay fixed inset-0 z-30 bg-gray-950/50 transition duration-500 lg:hidden dark:bg-gray-950/75"
+            ></div>
+
+            <?php if (isset($component)) { $__componentOriginal507b9338c225a118b42b83ae4f73ad2b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal507b9338c225a118b42b83ae4f73ad2b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament-panels::components.sidebar.index','data' => ['navigation' => $navigation]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('filament-panels::sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['navigation' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($navigation)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal507b9338c225a118b42b83ae4f73ad2b)): ?>
+<?php $attributes = $__attributesOriginal507b9338c225a118b42b83ae4f73ad2b; ?>
+<?php unset($__attributesOriginal507b9338c225a118b42b83ae4f73ad2b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal507b9338c225a118b42b83ae4f73ad2b)): ?>
+<?php $component = $__componentOriginal507b9338c225a118b42b83ae4f73ad2b; ?>
+<?php unset($__componentOriginal507b9338c225a118b42b83ae4f73ad2b); ?>
+<?php endif; ?>
+        <?php endif; ?>
+
         <div
             <?php if(filament()->isSidebarCollapsibleOnDesktop()): ?>
                 x-data="{}"
@@ -43,7 +72,7 @@
             ]); ?>"
         >
             <?php if(filament()->hasTopbar()): ?>
-                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::TOPBAR_BEFORE, scopes: $livewire->getRenderHookScopes())); ?>
+                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::topbar.before')); ?>
 
 
                 <?php if (isset($component)) { $__componentOriginal3730a29838011bd2ea530ae9e3b87bdd = $component; } ?>
@@ -67,7 +96,7 @@
 <?php unset($__componentOriginal3730a29838011bd2ea530ae9e3b87bdd); ?>
 <?php endif; ?>
 
-                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::TOPBAR_AFTER, scopes: $livewire->getRenderHookScopes())); ?>
+                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::topbar.after')); ?>
 
             <?php endif; ?>
 
@@ -100,91 +129,19 @@
                     },
                 ]); ?>"
             >
-                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::CONTENT_START, scopes: $livewire->getRenderHookScopes())); ?>
+                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::content.start')); ?>
 
 
                 <?php echo e($slot); ?>
 
 
-                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::CONTENT_END, scopes: $livewire->getRenderHookScopes())); ?>
+                <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::content.end')); ?>
 
             </main>
 
-            <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::FOOTER, scopes: $livewire->getRenderHookScopes())); ?>
+            <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::footer')); ?>
 
         </div>
-
-        <?php if(filament()->hasNavigation()): ?>
-            <div
-                x-cloak
-                x-data="{}"
-                x-on:click="$store.sidebar.close()"
-                x-show="$store.sidebar.isOpen"
-                x-transition.opacity.300ms
-                class="fi-sidebar-close-overlay fixed inset-0 z-30 bg-gray-950/50 transition duration-500 dark:bg-gray-950/75 lg:hidden"
-            ></div>
-
-            <?php if (isset($component)) { $__componentOriginal507b9338c225a118b42b83ae4f73ad2b = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal507b9338c225a118b42b83ae4f73ad2b = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament-panels::components.sidebar.index','data' => ['navigation' => $navigation,'class' => 'fi-main-sidebar']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
-<?php $component->withName('filament-panels::sidebar'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['navigation' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($navigation),'class' => 'fi-main-sidebar']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal507b9338c225a118b42b83ae4f73ad2b)): ?>
-<?php $attributes = $__attributesOriginal507b9338c225a118b42b83ae4f73ad2b; ?>
-<?php unset($__attributesOriginal507b9338c225a118b42b83ae4f73ad2b); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal507b9338c225a118b42b83ae4f73ad2b)): ?>
-<?php $component = $__componentOriginal507b9338c225a118b42b83ae4f73ad2b; ?>
-<?php unset($__componentOriginal507b9338c225a118b42b83ae4f73ad2b); ?>
-<?php endif; ?>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    setTimeout(() => {
-                        let activeSidebarItem = document.querySelector(
-                            '.fi-main-sidebar .fi-sidebar-item.fi-active',
-                        )
-
-                        if (
-                            !activeSidebarItem ||
-                            activeSidebarItem.offsetParent === null
-                        ) {
-                            activeSidebarItem = document.querySelector(
-                                '.fi-main-sidebar .fi-sidebar-group.fi-active',
-                            )
-                        }
-
-                        if (
-                            !activeSidebarItem ||
-                            activeSidebarItem.offsetParent === null
-                        ) {
-                            return
-                        }
-
-                        const sidebarWrapper = document.querySelector(
-                            '.fi-main-sidebar .fi-sidebar-nav',
-                        )
-
-                        if (!sidebarWrapper) {
-                            return
-                        }
-
-                        sidebarWrapper.scrollTo(
-                            0,
-                            activeSidebarItem.offsetTop -
-                                window.innerHeight / 2,
-                        )
-                    }, 10)
-                })
-            </script>
-        <?php endif; ?>
     </div>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

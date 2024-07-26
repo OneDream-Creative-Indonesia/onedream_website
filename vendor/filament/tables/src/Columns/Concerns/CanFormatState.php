@@ -4,14 +4,14 @@ namespace Filament\Tables\Columns\Concerns;
 
 use Closure;
 use Filament\Support\Contracts\HasLabel as LabelInterface;
-use Filament\Support\Enums\ArgumentValue;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Number;
 use Illuminate\Support\Str;
+
+use function Filament\Support\format_money;
+use function Filament\Support\format_number;
 
 trait CanFormatState
 {
@@ -99,36 +99,28 @@ trait CanFormatState
         return $this;
     }
 
-    public function money(string | Closure | null $currency = null, int $divideBy = 0, string | Closure | null $locale = null): static
+    public function money(string | Closure | null $currency = null, int $divideBy = 0): static
     {
         $this->isMoney = true;
 
-        $this->formatStateUsing(static function (TextColumn $column, $state) use ($currency, $divideBy, $locale): ?string {
+        $this->formatStateUsing(static function (TextColumn $column, $state) use ($currency, $divideBy): ?string {
             if (blank($state)) {
                 return null;
             }
 
-            if (! is_numeric($state)) {
-                return $state;
-            }
-
             $currency = $column->evaluate($currency) ?? Table::$defaultCurrency;
 
-            if ($divideBy) {
-                $state /= $divideBy;
-            }
-
-            return Number::currency($state, $currency, $column->evaluate($locale) ?? config('app.locale'));
+            return format_money($state, $currency, $divideBy);
         });
 
         return $this;
     }
 
-    public function numeric(int | Closure | null $decimalPlaces = null, string | Closure | null | ArgumentValue $decimalSeparator = ArgumentValue::Default, string | Closure | null | ArgumentValue $thousandsSeparator = ArgumentValue::Default, int | Closure | null $maxDecimalPlaces = null, string | Closure | null $locale = null): static
+    public function numeric(int | Closure | null $decimalPlaces = null, string | Closure | null $decimalSeparator = '.', string | Closure | null $thousandsSeparator = ','): static
     {
         $this->isNumeric = true;
 
-        $this->formatStateUsing(static function (TextColumn $column, $state) use ($decimalPlaces, $decimalSeparator, $locale, $maxDecimalPlaces, $thousandsSeparator): ?string {
+        $this->formatStateUsing(static function (TextColumn $column, $state) use ($decimalPlaces, $decimalSeparator, $thousandsSeparator): ?string {
             if (blank($state)) {
                 return null;
             }
@@ -137,23 +129,16 @@ trait CanFormatState
                 return $state;
             }
 
-            $decimalPlaces = $column->evaluate($decimalPlaces);
-            $decimalSeparator = $column->evaluate($decimalSeparator);
-            $thousandsSeparator = $column->evaluate($thousandsSeparator);
-
-            if (
-                ($decimalSeparator !== ArgumentValue::Default) ||
-                ($thousandsSeparator !== ArgumentValue::Default)
-            ) {
-                return number_format(
-                    $state,
-                    $decimalPlaces,
-                    $decimalSeparator === ArgumentValue::Default ? '.' : $decimalSeparator,
-                    $thousandsSeparator === ArgumentValue::Default ? ',' : $thousandsSeparator,
-                );
+            if ($decimalPlaces === null) {
+                return format_number($state);
             }
 
-            return Number::format($state, $decimalPlaces, $column->evaluate($maxDecimalPlaces), locale: $column->evaluate($locale) ?? config('app.locale'));
+            return number_format(
+                $state,
+                $column->evaluate($decimalPlaces),
+                $column->evaluate($decimalSeparator),
+                $column->evaluate($thousandsSeparator),
+            );
         });
 
         return $this;
@@ -185,7 +170,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function words(int | Closure | null $words = 100, string | Closure | null $end = '...'): static
+    public function words(int $words = 100, string $end = '...'): static
     {
         $this->wordLimit = $words;
         $this->wordLimitEnd = $end;
@@ -229,10 +214,6 @@ trait CanFormatState
             'state' => $state,
         ]);
 
-        if ($isHtml) {
-            $state = Str::sanitizeHtml($state);
-        }
-
         if ($state instanceof Htmlable) {
             $isHtml = true;
             $state = $state->toHtml();
@@ -268,8 +249,6 @@ trait CanFormatState
         if (filled($prefix)) {
             if ($prefix instanceof Htmlable) {
                 $prefix = $prefix->toHtml();
-            } elseif ($isHtml) {
-                $prefix = e($prefix);
             }
 
             $state = $prefix . $state;
@@ -278,14 +257,16 @@ trait CanFormatState
         if (filled($suffix)) {
             if ($suffix instanceof Htmlable) {
                 $suffix = $suffix->toHtml();
-            } elseif ($isHtml) {
-                $suffix = e($suffix);
             }
 
             $state = $state . $suffix;
         }
 
-        return $isHtml ? new HtmlString($state) : $state;
+        if ($isHtml) {
+            return str($state)->sanitizeHtml()->toHtmlString();
+        }
+
+        return $state;
     }
 
     public function getCharacterLimit(): ?int

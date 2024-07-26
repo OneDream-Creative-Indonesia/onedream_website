@@ -18,7 +18,7 @@ trait BelongsToTable
 
     public function getTable(): Table
     {
-        return $this->table;
+        return $this->table ?? $this->getLayout()->getTable();
     }
 
     public function getLivewire(): HasTable

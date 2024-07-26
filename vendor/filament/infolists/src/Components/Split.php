@@ -3,18 +3,15 @@
 namespace Filament\Infolists\Components;
 
 use Closure;
-use Filament\Support\Concerns\HasFromBreakpoint;
-use Filament\Support\Concerns\HasVerticalAlignment;
 
 class Split extends Component
 {
-    use HasFromBreakpoint;
-    use HasVerticalAlignment;
-
     /**
      * @var view-string
      */
     protected string $view = 'filament-infolists::components.split';
+
+    protected string | Closure | null $fromBreakpoint = null;
 
     /**
      * @param  array<Component> | Closure  $schema
@@ -33,5 +30,17 @@ class Split extends Component
         $static->configure();
 
         return $static;
+    }
+
+    public function from(string | Closure | null $breakpoint): static
+    {
+        $this->fromBreakpoint = $breakpoint;
+
+        return $this;
+    }
+
+    public function getFromBreakpoint(): ?string
+    {
+        return $this->evaluate($this->fromBreakpoint);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class InvoiceController extends Controller
@@ -14,7 +14,7 @@ class InvoiceController extends Controller
     }
     public function downloadPDF($id)
     {
-        $path = base_path('../public_html/onedream.id/img/bg/bg-invoice.jpg');
+        $path = public_path('img/bg/bg-invoice.jpg');
         if (!file_exists($path)) {
             // Handle error jika file tidak ditemukan
             abort(404);
@@ -25,7 +25,7 @@ class InvoiceController extends Controller
         $imageDataUri = 'data:image/' . $extension . ';base64,' . $imageData;
 
         $invoice = Invoice::findOrFail($id);
-        $pdf = PDF::loadView('invoices.invoice', compact('invoice', 'imageDataUri'));
+        $pdf = Pdf::loadView('invoices.invoice', compact('invoice', 'imageDataUri'));
         $pdf->setPaper('A4', 'portrait');
         return $pdf->download('invoice_'.$invoice->invoice_number.'.pdf');
     }

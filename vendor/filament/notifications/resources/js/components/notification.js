@@ -25,15 +25,7 @@ export default (Alpine) => {
                 notification.duration &&
                 notification.duration !== 'persistent'
             ) {
-                setTimeout(() => {
-                    if (!this.$el.matches(':hover')) {
-                        this.close()
-
-                        return
-                    }
-
-                    this.$el.addEventListener('mouseleave', () => this.close())
-                }, notification.duration)
+                setTimeout(() => this.close(), notification.duration)
             }
 
             this.isShown = true

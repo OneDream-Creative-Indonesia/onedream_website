@@ -71,8 +71,7 @@ trait CanSummarizeRecords
         $queryToJoin = $query->clone();
         $joins = [];
 
-        $query = DB::connection($query->getModel()->getConnectionName())
-            ->table($query->toBase(), $query->getModel()->getTable());
+        $query = DB::table($query->toBase(), $query->getModel()->getTable());
 
         if ($modifyQueryUsing) {
             $query = $modifyQueryUsing($query) ?? $query;

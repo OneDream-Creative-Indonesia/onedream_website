@@ -7,9 +7,9 @@
 
     $getLogoClasses = fn (bool $isDarkMode): string => \Illuminate\Support\Arr::toCssClasses([
         'fi-logo',
-        'flex' => ! $hasDarkModeBrandLogo,
-        'flex dark:hidden' => $hasDarkModeBrandLogo && (! $isDarkMode),
-        'hidden dark:flex' => $hasDarkModeBrandLogo && $isDarkMode,
+        'inline-flex' => ! $hasDarkModeBrandLogo,
+        'inline-flex dark:hidden' => $hasDarkModeBrandLogo && (! $isDarkMode),
+        'hidden dark:inline-flex' => $hasDarkModeBrandLogo && $isDarkMode,
     ]);
 
     $logoStyles = "height: {$brandLogoHeight}";
@@ -21,7 +21,7 @@
                     extract($args, EXTR_SKIP);
                     ob_start(); ?>
         
-    <?php if($logo instanceof \Illuminate\Contracts\Support\Htmlable): ?>
+    <!--[if BLOCK]><![endif]--><?php if($logo instanceof \Illuminate\Contracts\Support\Htmlable): ?>
         <div
             <?php echo e($attributes
                     ->class([$getLogoClasses($isDarkMode)])
@@ -33,7 +33,8 @@
         </div>
     <?php elseif(filled($logo)): ?>
         <img
-            alt="<?php echo e(__('filament-panels::layout.logo.alt', ['name' => $brandName])); ?>"
+            alt="<?php echo e($brandName); ?>"
+            loading="lazy"
             src="<?php echo e($logo); ?>"
             <?php echo e($attributes
                     ->class([$getLogoClasses($isDarkMode)])
@@ -51,7 +52,7 @@
             <?php echo e($brandName); ?>
 
         </div>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
             <?php return new \Illuminate\Support\HtmlString(ob_get_clean()); };
                 })(get_defined_vars()); ?>
@@ -60,8 +61,8 @@
 <?php echo e($content($brandLogo)); ?>
 
 
-<?php if($hasDarkModeBrandLogo): ?>
+<!--[if BLOCK]><![endif]--><?php if($hasDarkModeBrandLogo): ?>
     <?php echo e($content($darkModeBrandLogo, isDarkMode: true)); ?>
 
-<?php endif; ?>
+<?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 <?php /**PATH C:\xampp\htdocs\onedream_website\vendor\filament\filament\src\/../resources/views/components/logo.blade.php ENDPATH**/ ?>

@@ -3,8 +3,7 @@
 namespace Filament\Tables\Actions\Concerns;
 
 use Closure;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 trait InteractsWithRecords
 {
@@ -12,9 +11,9 @@ trait InteractsWithRecords
 
     protected string | Closure | null $pluralModelLabel = null;
 
-    protected EloquentCollection | Collection | Closure | null $records = null;
+    protected Collection | Closure | null $records = null;
 
-    public function records(EloquentCollection | Collection | Closure | null $records): static
+    public function records(Collection | Closure | null $records): static
     {
         $this->records = $records;
 
@@ -62,7 +61,7 @@ trait InteractsWithRecords
         return $this->getTable()->getPluralModelLabel();
     }
 
-    public function getRecords(): EloquentCollection | Collection | null
+    public function getRecords(): ?Collection
     {
         return $this->records = $this->evaluate($this->records);
     }

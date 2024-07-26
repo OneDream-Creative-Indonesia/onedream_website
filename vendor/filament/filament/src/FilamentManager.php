@@ -34,7 +34,10 @@ use Illuminate\Support\Facades\Event;
 
 class FilamentManager
 {
-    protected ?string $currentDomain = null;
+    /**
+     * @var array<string, Panel>
+     */
+    protected array $panels = [];
 
     protected ?Panel $currentPanel = null;
 
@@ -43,13 +46,6 @@ class FilamentManager
     protected bool $isCurrentPanelBooted = false;
 
     protected ?Model $tenant = null;
-
-    public function __construct()
-    {
-        // Resolve the panel registry to set the current panel
-        // as the default, which uses a `resolving()` callback.
-        app()->resolved(PanelRegistry::class) || app(PanelRegistry::class);
-    }
 
     public function auth(): Guard
     {
@@ -107,7 +103,7 @@ class FilamentManager
 
     public function getCurrentPanel(): ?Panel
     {
-        return $this->currentPanel;
+        return $this->currentPanel ?? null;
     }
 
     public function getDarkModeBrandLogo(): string | Htmlable | null
@@ -130,7 +126,11 @@ class FilamentManager
      */
     public function getDefaultPanel(): Panel
     {
-        return app(PanelRegistry::class)->getDefault();
+        return Arr::first(
+            $this->panels,
+            fn (Panel $panel): bool => $panel->isDefault(),
+            fn () => throw NoDefaultPanelSetException::make(),
+        );
     }
 
     /**
@@ -171,22 +171,12 @@ class FilamentManager
         return $this->getCurrentPanel()->getFontUrl();
     }
 
-    public function getGlobalSearchDebounce(): string
-    {
-        return $this->getCurrentPanel()->getGlobalSearchDebounce();
-    }
-
     /**
      * @return array<string>
      */
     public function getGlobalSearchKeyBindings(): array
     {
         return $this->getCurrentPanel()->getGlobalSearchKeyBindings();
-    }
-
-    public function getGlobalSearchFieldSuffix(): ?string
-    {
-        return $this->getCurrentPanel()->getGlobalSearchFieldSuffix();
     }
 
     public function getGlobalSearchProvider(): ?GlobalSearchProvider
@@ -197,11 +187,6 @@ class FilamentManager
     public function getHomeUrl(): ?string
     {
         return $this->getCurrentPanel()->getHomeUrl() ?? $this->getCurrentPanel()->getUrl();
-    }
-
-    public function getId(): ?string
-    {
-        return $this->getCurrentPanel()?->getId();
     }
 
     /**
@@ -279,9 +264,9 @@ class FilamentManager
         return $this->getCurrentPanel()->getPages();
     }
 
-    public function getPanel(?string $id = null, bool $isStrict = true): Panel
+    public function getPanel(?string $id = null): Panel
     {
-        return app(PanelRegistry::class)->get($id, $isStrict);
+        return $this->panels[$id] ?? $this->getDefaultPanel();
     }
 
     /**
@@ -289,7 +274,7 @@ class FilamentManager
      */
     public function getPanels(): array
     {
-        return app(PanelRegistry::class)->all();
+        return $this->panels;
     }
 
     public function getPlugin(string $id): Plugin
@@ -303,11 +288,6 @@ class FilamentManager
     public function getProfileUrl(array $parameters = []): ?string
     {
         return $this->getCurrentPanel()->getProfileUrl($parameters);
-    }
-
-    public function isProfilePageSimple(): bool
-    {
-        return $this->getCurrentPanel()->isProfilePageSimple();
     }
 
     /**
@@ -535,11 +515,6 @@ class FilamentManager
         return $this->getCurrentPanel()->hasBreadcrumbs();
     }
 
-    public function hasBroadcasting(): bool
-    {
-        return $this->getCurrentPanel()->hasBroadcasting();
-    }
-
     public function hasCollapsibleNavigationGroups(): bool
     {
         return $this->getCurrentPanel()->hasCollapsibleNavigationGroups();
@@ -630,11 +605,6 @@ class FilamentManager
         return $this->getCurrentPanel()->hasTopNavigation();
     }
 
-    public function hasUnsavedChangesAlerts(): bool
-    {
-        return $this->getCurrentPanel()->hasUnsavedChangesAlerts();
-    }
-
     public function isGlobalSearchEnabled(): bool
     {
         if ($this->getGlobalSearchProvider() === null) {
@@ -665,9 +635,20 @@ class FilamentManager
         return $this->getCurrentPanel()->isSidebarFullyCollapsibleOnDesktop();
     }
 
+    public function mountNavigation(): void
+    {
+        $this->getCurrentPanel()->mountNavigation();
+    }
+
     public function registerPanel(Panel $panel): void
     {
-        app(PanelRegistry::class)->register($panel);
+        $this->panels[$panel->getId()] = $panel;
+
+        $panel->register();
+
+        if ($panel->isDefault()) {
+            $this->setCurrentPanel($panel);
+        }
     }
 
     /**
@@ -681,11 +662,6 @@ class FilamentManager
     public function serving(Closure $callback): void
     {
         Event::listen(ServingFilament::class, $callback);
-    }
-
-    public function currentDomain(?string $domain): void
-    {
-        $this->currentDomain = $domain;
     }
 
     public function setCurrentPanel(?Panel $panel): void
@@ -858,27 +834,5 @@ class FilamentManager
     public function getDefaultThemeMode(): ThemeMode
     {
         return $this->getCurrentPanel()->getDefaultThemeMode();
-    }
-
-    public function arePasswordsRevealable(): bool
-    {
-        return $this->getCurrentPanel()->arePasswordsRevealable();
-    }
-
-    public function getCurrentDomain(?string $testingDomain = null): string
-    {
-        if (filled($this->currentDomain)) {
-            return $this->currentDomain;
-        }
-
-        if (app()->runningUnitTests()) {
-            return $testingDomain;
-        }
-
-        if (app()->runningInConsole()) {
-            throw new Exception('The current domain is not set, but multiple domains are registered for the panel. Please use [Filament::currentDomain(\'example.com\')] to set the current domain to ensure that panel URLs are generated correctly.');
-        }
-
-        return request()->getHost();
     }
 }

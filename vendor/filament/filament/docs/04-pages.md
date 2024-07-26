@@ -18,14 +18,23 @@ This command will create two files - a page class in the `/Pages` directory of t
 
 Page classes are all full-page [Livewire](https://livewire.laravel.com) components with a few extra utilities you can use with the panel.
 
-## Authorization
+## Conditionally hiding pages in navigation
 
-You can prevent pages from appearing in the menu by overriding the `canAccess()` method in your Page class. This is useful if you want to control which users can see the page in the navigation, and also which users can visit the page directly:
+You can prevent pages from appearing in the menu by overriding the `shouldRegisterNavigation()` method in your Page class. This is useful if you want to control which users can see the page in the sidebar.
 
 ```php
-public static function canAccess(): bool
+public static function shouldRegisterNavigation(): bool
 {
     return auth()->user()->canManageSettings();
+}
+```
+
+Please be aware that all users will still be able to visit this page through its direct URL, so to fully limit access, you must also check in the `mount()` method of the page:
+
+```php
+public function mount(): void
+{
+    abort_unless(auth()->user()->canManageSettings(), 403);
 }
 ```
 
@@ -37,7 +46,7 @@ Since all pages are Livewire components, you can [add actions](../actions/adding
 
 ### Header actions
 
-You can also easily add actions to the header of any page, including [resource pages](resources/getting-started). You don't need to worry about adding anything to the Blade template, we handle that for you. Just return your actions from the `getHeaderActions()` method of the page class:
+You can also easily add actions to the header of any page, including [resource pages](resources/getting-started). You don't need to worry about adding anything to the Blade, we handle that for you. Just return your actions from the `getHeaderActions()` method of the page class:
 
 ```php
 use Filament\Actions\Action;
@@ -326,27 +335,4 @@ If you have multiple panels in your app, `getUrl()` will generate a URL within t
 use App\Filament\Pages\Settings;
 
 Settings::getUrl(panel: 'marketing');
-```
-
-## Adding sub-navigation between pages
-
-You may want to add a common sub-navigation to multiple pages, to allow users to quickly navigate between them. You can do this by defining a [cluster](clusters). Clusters can also contain [resources](resources), and you can switch between multiple pages or resources within a cluster.
-
-## Adding extra attributes to the body tag of a page
-
-You may wish to add extra attributes to the `<body>` tag of a page. To do this, you can set an array of attributes in `$extraBodyAttributes`:
-
-```php
-protected array $extraBodyAttributes = [];
-```
-
-Or, you can return an array of attributes and their values from the `getExtraBodyAttributes()` method:
-
-```php
-public function getExtraBodyAttributes(): array
-{
-    return [
-        'class' => 'settings-page',
-    ];
-}
 ```

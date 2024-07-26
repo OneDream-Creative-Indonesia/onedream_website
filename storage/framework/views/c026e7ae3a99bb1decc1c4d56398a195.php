@@ -53,14 +53,13 @@
                 <?php endif; ?>
                 ax-load-src="<?php echo e(\Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('textarea', 'filament/forms')); ?>"
                 x-data="textareaFormComponent({ initialHeight: <?php echo \Illuminate\Support\Js::from($initialHeight)->toHtml() ?> })"
+                x-ignore
                 x-intersect.once="render()"
                 x-on:input="render()"
                 x-on:resize.window="render()"
                 <?php echo e($getExtraAlpineAttributeBag()); ?>
 
             <?php endif; ?>
-            x-ignore
-            wire:ignore.style.height
             <?php echo e($getExtraInputAttributeBag()
                     ->merge([
                         'autocomplete' => $getAutocomplete(),

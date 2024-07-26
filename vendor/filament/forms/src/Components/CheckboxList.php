@@ -6,6 +6,7 @@ use Closure;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Services\RelationshipJoiner;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -19,13 +20,10 @@ class CheckboxList extends Field implements Contracts\CanDisableOptions, Contrac
     use Concerns\CanDisableOptions;
     use Concerns\CanDisableOptionsWhenSelectedInSiblingRepeaterItems;
     use Concerns\CanFixIndistinctState;
-    use Concerns\CanLimitItemsLength;
-    use Concerns\HasDescriptions;
     use Concerns\HasExtraInputAttributes;
     use Concerns\HasGridDirection;
     use Concerns\HasNestedRecursiveValidationRules;
     use Concerns\HasOptions;
-    use Concerns\HasPivotData;
 
     /**
      * @var view-string
@@ -37,6 +35,11 @@ class CheckboxList extends Field implements Contracts\CanDisableOptions, Contrac
     protected ?Closure $getOptionLabelFromRecordUsing = null;
 
     protected string | Closure | null $relationship = null;
+
+    /**
+     * @var array<string | Htmlable> | Arrayable | Closure
+     */
+    protected array | Arrayable | Closure $descriptions = [];
 
     protected bool | Closure $isBulkToggleable = false;
 
@@ -168,63 +171,26 @@ class CheckboxList extends Field implements Contracts\CanDisableOptions, Contrac
                 ->toArray();
         });
 
-        $this->loadStateFromRelationshipsUsing(static function (CheckboxList $component, ?array $state) use ($modifyQueryUsing): void {
+        $this->loadStateFromRelationshipsUsing(static function (CheckboxList $component, ?array $state): void {
             $relationship = $component->getRelationship();
 
-            if ($modifyQueryUsing) {
-                $component->evaluate($modifyQueryUsing, [
-                    'query' => $relationship->getQuery(),
-                ]);
-            }
-
-            /** @var Collection $relatedRecords */
-            $relatedRecords = $relationship->getResults();
+            /** @var Collection $relatedModels */
+            $relatedModels = $relationship->getResults();
 
             $component->state(
                 // Cast the related keys to a string, otherwise Livewire does not
                 // know how to handle deselection.
                 //
                 // https://github.com/filamentphp/filament/issues/1111
-                $relatedRecords
+                $relatedModels
                     ->pluck($relationship->getRelatedKeyName())
                     ->map(static fn ($key): string => strval($key))
-                    ->all(),
+                    ->toArray(),
             );
         });
 
-        $this->saveRelationshipsUsing(static function (CheckboxList $component, ?array $state) use ($modifyQueryUsing) {
-            $relationship = $component->getRelationship();
-
-            if ($modifyQueryUsing) {
-                $component->evaluate($modifyQueryUsing, [
-                    'query' => $relationship->getQuery(),
-                ]);
-            }
-
-            /** @var Collection $relatedRecords */
-            $relatedRecords = $relationship->getResults();
-
-            $recordsToDetach = array_diff(
-                $relatedRecords
-                    ->pluck($relationship->getRelatedKeyName())
-                    ->map(static fn ($key): string => strval($key))
-                    ->all(),
-                $state ?? [],
-            );
-
-            if (count($recordsToDetach) > 0) {
-                $relationship->detach($recordsToDetach);
-            }
-
-            $pivotData = $component->getPivotData();
-
-            if ($pivotData === []) {
-                $relationship->sync($state ?? [], detaching: false);
-
-                return;
-            }
-
-            $relationship->syncWithPivotValues($state ?? [], $pivotData, detaching: false);
+        $this->saveRelationshipsUsing(static function (CheckboxList $component, ?array $state) {
+            $component->getRelationship()->sync($state ?? []);
         });
 
         $this->dehydrated(false);
@@ -251,7 +217,7 @@ class CheckboxList extends Field implements Contracts\CanDisableOptions, Contrac
         return $this->getOptionLabelFromRecordUsing !== null;
     }
 
-    public function getOptionLabelFromRecord(Model $record): string | Htmlable
+    public function getOptionLabelFromRecord(Model $record): string
     {
         return $this->evaluate(
             $this->getOptionLabelFromRecordUsing,
@@ -304,5 +270,45 @@ class CheckboxList extends Field implements Contracts\CanDisableOptions, Contrac
     public function isBulkToggleable(): bool
     {
         return (bool) $this->evaluate($this->isBulkToggleable);
+    }
+
+    /**
+     * @param  array<string | Htmlable> | Arrayable | Closure  $descriptions
+     */
+    public function descriptions(array | Arrayable | Closure $descriptions): static
+    {
+        $this->descriptions = $descriptions;
+
+        return $this;
+    }
+
+    /**
+     * @param  array-key  $value
+     */
+    public function hasDescription($value): bool
+    {
+        return array_key_exists($value, $this->getDescriptions());
+    }
+
+    /**
+     * @param  array-key  $value
+     */
+    public function getDescription($value): string | Htmlable | null
+    {
+        return $this->getDescriptions()[$value] ?? null;
+    }
+
+    /**
+     * @return array<string | Htmlable>
+     */
+    public function getDescriptions(): array
+    {
+        $descriptions = $this->evaluate($this->descriptions);
+
+        if ($descriptions instanceof Arrayable) {
+            $descriptions = $descriptions->toArray();
+        }
+
+        return $descriptions;
     }
 }

@@ -5,7 +5,6 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
 <?php foreach($attributes->onlyProps([
     'activeFiltersCount' => 0,
-    'applyAction',
     'form',
     'layout',
     'maxHeight' => null,
@@ -16,7 +15,6 @@
 } ?>
 <?php $attributes = $attributes->exceptProps([
     'activeFiltersCount' => 0,
-    'applyAction',
     'form',
     'layout',
     'maxHeight' => null,
@@ -25,7 +23,6 @@
 ]); ?>
 <?php foreach (array_filter(([
     'activeFiltersCount' => 0,
-    'applyAction',
     'form',
     'layout',
     'maxHeight' => null,
@@ -43,14 +40,14 @@
 <!--[if BLOCK]><![endif]--><?php if(($layout === FiltersLayout::Modal) || $triggerAction->isModalSlideOver()): ?>
     <?php if (isset($component)) { $__componentOriginal0942a211c37469064369f887ae8d1cef = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal0942a211c37469064369f887ae8d1cef = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.modal.index','data' => ['alignment' => $triggerAction->getModalAlignment(),'autofocus' => $triggerAction->isModalAutofocused(),'closeButton' => $triggerAction->hasModalCloseButton(),'closeByClickingAway' => $triggerAction->isModalClosedByClickingAway(),'closeByEscaping' => $triggerAction?->isModalClosedByEscaping(),'description' => $triggerAction->getModalDescription(),'footerActions' => $triggerAction->getVisibleModalFooterActions(),'footerActionsAlignment' => $triggerAction->getModalFooterActionsAlignment(),'heading' => $triggerAction->getCustomModalHeading() ?? __('filament-tables::table.filters.heading'),'icon' => $triggerAction->getModalIcon(),'iconColor' => $triggerAction->getModalIconColor(),'slideOver' => $triggerAction->isModalSlideOver(),'stickyFooter' => $triggerAction->isModalFooterSticky(),'stickyHeader' => $triggerAction->isModalHeaderSticky(),'width' => $width,'wire:key' => ''.e($this->getId()).'.table.filters','attributes' => $attributes->class(['fi-ta-filters-modal'])]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.modal.index','data' => ['alignment' => $triggerAction->getModalAlignment(),'closeButton' => $triggerAction->hasModalCloseButton(),'closeByClickingAway' => $triggerAction->isModalClosedByClickingAway(),'description' => $triggerAction->getModalDescription(),'footerActions' => $triggerAction->getVisibleModalFooterActions(),'footerActionsAlignment' => $triggerAction->getModalFooterActionsAlignment(),'heading' => $triggerAction->getCustomModalHeading() ?? __('filament-tables::table.filters.heading'),'icon' => $triggerAction->getModalIcon(),'iconColor' => $triggerAction->getModalIconColor(),'slideOver' => $triggerAction->isModalSlideOver(),'stickyFooter' => $triggerAction->isModalFooterSticky(),'stickyHeader' => $triggerAction->isModalHeaderSticky(),'width' => $width,'wire:key' => ''.e($this->getId()).'.table.filters','attributes' => $attributes->class(['fi-ta-filters-modal'])]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('filament::modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['alignment' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalAlignment()),'autofocus' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalAutofocused()),'close-button' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->hasModalCloseButton()),'close-by-clicking-away' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalClosedByClickingAway()),'close-by-escaping' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction?->isModalClosedByEscaping()),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalDescription()),'footer-actions' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getVisibleModalFooterActions()),'footer-actions-alignment' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalFooterActionsAlignment()),'heading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getCustomModalHeading() ?? __('filament-tables::table.filters.heading')),'icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalIcon()),'icon-color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalIconColor()),'slide-over' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalSlideOver()),'sticky-footer' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalFooterSticky()),'sticky-header' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalHeaderSticky()),'width' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($width),'wire:key' => ''.e($this->getId()).'.table.filters','attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes->class(['fi-ta-filters-modal']))]); ?>
+<?php $component->withAttributes(['alignment' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalAlignment()),'close-button' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->hasModalCloseButton()),'close-by-clicking-away' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalClosedByClickingAway()),'description' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalDescription()),'footer-actions' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getVisibleModalFooterActions()),'footer-actions-alignment' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalFooterActionsAlignment()),'heading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getCustomModalHeading() ?? __('filament-tables::table.filters.heading')),'icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalIcon()),'icon-color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->getModalIconColor()),'slide-over' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalSlideOver()),'sticky-footer' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalFooterSticky()),'sticky-header' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($triggerAction->isModalHeaderSticky()),'width' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($width),'wire:key' => ''.e($this->getId()).'.table.filters','attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes->class(['fi-ta-filters-modal']))]); ?>
          <?php $__env->slot('trigger', null, []); ?> 
             <?php echo e($triggerAction->badge($activeFiltersCount)); ?>
 
@@ -92,14 +89,14 @@
 
         <?php if (isset($component)) { $__componentOriginal8fcc8bb3dcedd6e3c85ec7cd95e48b39 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8fcc8bb3dcedd6e3c85ec7cd95e48b39 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament-tables::components.filters.index','data' => ['applyAction' => $applyAction,'form' => $form,'class' => 'p-6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament-tables::components.filters.index','data' => ['form' => $form,'class' => 'p-6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('filament-tables::filters'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['apply-action' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($applyAction),'form' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($form),'class' => 'p-6']); ?>
+<?php $component->withAttributes(['form' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($form),'class' => 'p-6']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8fcc8bb3dcedd6e3c85ec7cd95e48b39)): ?>

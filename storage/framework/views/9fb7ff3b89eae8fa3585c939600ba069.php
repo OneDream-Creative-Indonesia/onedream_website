@@ -12,6 +12,7 @@
     'dynamicComponent' => null,
     'group' => null,
     'icon' => null,
+    'iconPosition' => null,
     'iconSize' => null,
     'iconButton' => false,
     'label' => null,
@@ -35,6 +36,7 @@
     'dynamicComponent' => null,
     'group' => null,
     'icon' => null,
+    'iconPosition' => null,
     'iconSize' => null,
     'iconButton' => false,
     'label' => null,
@@ -56,6 +58,7 @@
     'dynamicComponent' => null,
     'group' => null,
     'icon' => null,
+    'iconPosition' => null,
     'iconSize' => null,
     'iconButton' => false,
     'label' => null,
@@ -82,6 +85,7 @@
             ->dropdownPlacement($dropdownPlacement)
             ->dropdownWidth($dropdownWidth)
             ->icon($icon)
+            ->iconPosition($iconPosition)
             ->iconSize($iconSize)
             ->label($label)
             ->size($size)
@@ -93,10 +97,7 @@
             : $group->badge($badge);
 
         if ($button) {
-            $group
-                ->button()
-                ->iconPosition($attributes->get('iconPosition') ?? $attributes->get('icon-position'))
-                ->outlined($attributes->get('outlined') ?? false);
+            $group->button();
         }
 
         if ($iconButton) {
@@ -167,7 +168,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\DynamicComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['color' => $group->getColor(),'icon' => $group->getIcon(),'icon-size' => $group->getIconSize(),'label-sr-only' => $group->isLabelHidden(),'size' => $group->getSize(),'tooltip' => $group->getTooltip(),'attributes' => \Filament\Support\prepare_inherited_attributes($attributes)->merge($group->getExtraAttributes(), escape: false)]); ?>
+<?php $component->withAttributes(['color' => $group->getColor(),'icon' => $group->getIcon(),'icon-size' => $group->getIconSize(),'label-sr-only' => $group->isLabelHidden(),'tooltip' => $group->getTooltip(),'attributes' => \Filament\Support\prepare_inherited_attributes($attributes)->merge($group->getExtraAttributes(), escape: false)]); ?>
                 <?php echo e($slot); ?>
 
              <?php echo $__env->renderComponent(); ?>

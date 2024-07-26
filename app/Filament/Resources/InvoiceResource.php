@@ -59,7 +59,7 @@ class InvoiceResource extends Resource
                         ->hidden(fn ($get) => $get('invoice_type') !== 'masuk')
                         ->required(),
                 ])->collapsible()->collapsed(),
-            
+
             // Invoice Items Section
             Forms\Components\Section::make('Item Invoice')
                 ->schema([
@@ -75,14 +75,15 @@ class InvoiceResource extends Resource
                                 ->required(),
                             Forms\Components\TextInput::make('price')
                                 ->label('Harga')
-                                ->required(),
+                                ->required()
+                                ->currencyMask(thousandSeparator: ',', decimalSeparator: '.'),
                         ]),
                 ])->collapsible()->collapsed(),
 
                 Forms\Components\Section::make('Info Pembayaran')
                 ->schema([
                     Forms\Components\Select::make('bank_detail_id')->label('Info Pembayaran')->required()
-                        ->relationship('bankDetail', 'id') 
+                        ->relationship('bankDetail', 'id')
                         ->options(BankDetail::pluck('id')->mapWithKeys(function ($id) {
                                 $bankDetail = BankDetail::find($id);
                                 $label = "{$bankDetail->bank} - {$bankDetail->cabang} - {$bankDetail->no_rek} - {$bankDetail->owner_rek}";
@@ -107,9 +108,9 @@ class InvoiceResource extends Resource
                             $latestBankDetailId = BankDetail::first();
                             if ($latestBankDetailId) {
                                 return $latestBankDetailId->id;
-                            } 
+                            }
                             return null;
-                     
+
                         })->createOptionUsing(function ($data) {
                             $bankDetail = new BankDetail($data);
                             $bankDetail->save();
@@ -149,7 +150,7 @@ class InvoiceResource extends Resource
                 ->query(fn (Builder $query) => $query->where('invoice_type', 'masuk')),
                 Filter::make('Invoice Keluar')
                 ->query(fn (Builder $query) => $query->where('invoice_type', 'keluar')),
-                
+
             ])
             ->actions([
                 Tables\Actions\Action::make('downloadPDF')
@@ -161,7 +162,7 @@ class InvoiceResource extends Resource
                     ->color('warning'),
                 Tables\Actions\EditAction::make()->color('black'),
                 Tables\Actions\DeleteAction::make()->color('danger'),
-            
+
             ]);
     }
 

@@ -5,7 +5,6 @@ namespace Filament\Actions\Concerns;
 use Closure;
 use Filament\Support\Contracts\HasLabel as LabelInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use UnitEnum;
 
 trait HasSelect
 {
@@ -42,23 +41,24 @@ trait HasSelect
     {
         $options = $this->evaluate($this->options) ?? [];
 
+        $enum = $options;
         if (
-            is_string($options) &&
-            enum_exists($enum = $options)
+            is_string($enum) &&
+            enum_exists($enum)
         ) {
             if (is_a($enum, LabelInterface::class, allow_string: true)) {
-                return array_reduce($enum::cases(), function (array $carry, LabelInterface & UnitEnum $case): array {
-                    $carry[$case?->value ?? $case->name] = $case->getLabel() ?? $case->name;
-
-                    return $carry;
-                }, []);
+                return collect($enum::cases())
+                    ->mapWithKeys(fn ($case) => [
+                        ($case?->value ?? $case->name) => $case->getLabel() ?? $case->name,
+                    ])
+                    ->all();
             }
 
-            return array_reduce($enum::cases(), function (array $carry, UnitEnum $case): array {
-                $carry[$case?->value ?? $case->name] = $case->name;
-
-                return $carry;
-            }, []);
+            return collect($enum::cases())
+                ->mapWithKeys(fn ($case) => [
+                    ($case?->value ?? $case->name) => $case->name,
+                ])
+                ->all();
         }
 
         if ($options instanceof Arrayable) {

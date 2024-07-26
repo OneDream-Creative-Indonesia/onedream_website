@@ -4,7 +4,6 @@ namespace Filament\Actions;
 
 use Filament\Actions\Testing\TestsActions;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Routing\Router;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -18,17 +17,11 @@ class ActionsServiceProvider extends PackageServiceProvider
             ->hasCommands($this->getCommands())
             ->hasMigrations([
                 'create_imports_table',
-                'create_exports_table',
                 'create_failed_import_rows_table',
             ])
             ->hasRoute('web')
             ->hasTranslations()
             ->hasViews();
-    }
-
-    public function packageRegistered(): void
-    {
-        app(Router::class)->middlewareGroup('filament.actions', ['web', 'auth']);
     }
 
     public function packageBooted(): void
@@ -50,7 +43,6 @@ class ActionsServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         $commands = [
-            Commands\MakeExporterCommand::class,
             Commands\MakeImporterCommand::class,
         ];
 

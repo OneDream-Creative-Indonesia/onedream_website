@@ -46,13 +46,15 @@ class FinanceResource extends Resource
                     ->label('Jumlah Pemasukan')
                     ->type('text')
                     ->extraAttributes(['class' => 'input-mata-uang'])
-                    ->hidden(fn ($get) => $get('finance_type') !== 'masuk'),
+                    ->hidden(fn ($get) => $get('finance_type') !== 'masuk')
+                    ->currencyMask(thousandSeparator: ',', decimalSeparator: '.'),
 
                 TextInput::make('keluar')
                     ->label('Jumlah Pengeluaran')
                     ->type('text')
                     ->extraAttributes(['class' => 'input-mata-uang'])
-                    ->hidden(fn ($get) => $get('finance_type') !== 'keluar'),
+                    ->hidden(fn ($get) => $get('finance_type') !== 'keluar')
+                    ->currencyMask(thousandSeparator: ',', decimalSeparator: '.'),
                 Textarea::make('description')
                     ->label('Deskripsi Keuangan')
                     ->minLength(3)

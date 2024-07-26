@@ -12,7 +12,7 @@ Start by creating a widget with the command:
 php artisan make:filament-widget StatsOverview --stats-overview
 ```
 
-This command will create a new `StatsOverview.php` file. Open it, and return `Stat` instances from the `getStats()` method:
+Then return `Stat` instances from the `getStats()` method:
 
 ```php
 <?php
@@ -42,8 +42,6 @@ Now, check out your widget in the dashboard.
 You may add a `description()` to provide additional information, along with a `descriptionIcon()`:
 
 ```php
-use Filament\Widgets\StatsOverviewWidget\Stat;
-
 protected function getStats(): array
 {
     return [
@@ -51,7 +49,7 @@ protected function getStats(): array
             ->description('32k increase')
             ->descriptionIcon('heroicon-m-arrow-trending-up'),
         Stat::make('Bounce rate', '21%')
-            ->description('7% decrease')
+            ->description('7% increase')
             ->descriptionIcon('heroicon-m-arrow-trending-down'),
         Stat::make('Average time on page', '3:12')
             ->description('3% increase')
@@ -60,24 +58,11 @@ protected function getStats(): array
 }
 ```
 
-The `descriptionIcon()` method also accepts a second parameter to put the icon before the description instead of after it:
-
-```php
-use Filament\Support\Enums\IconPosition;
-use Filament\Widgets\StatsOverviewWidget\Stat;
-
-Stat::make('Unique views', '192.1k')
-    ->description('32k increase')
-    ->descriptionIcon('heroicon-m-arrow-trending-up', IconPosition::Before)
-```
-
 ## Changing the color of the stat
 
 You may also give stats a `color()` (`danger`, `gray`, `info`, `primary`, `success` or `warning`):
 
 ```php
-use Filament\Widgets\StatsOverviewWidget\Stat;
-
 protected function getStats(): array
 {
     return [
@@ -102,8 +87,6 @@ protected function getStats(): array
 You may also pass extra HTML attributes to stats using `extraAttributes()`:
 
 ```php
-use Filament\Widgets\StatsOverviewWidget\Stat;
-
 protected function getStats(): array
 {
     return [
@@ -125,8 +108,6 @@ In this example, we are deliberately escaping the `$` in `$dispatch()` since thi
 You may also add or chain a `chart()` to each stat to provide historical data. The `chart()` method accepts an array of data points to plot:
 
 ```php
-use Filament\Widgets\StatsOverviewWidget\Stat;
-
 protected function getStats(): array
 {
     return [

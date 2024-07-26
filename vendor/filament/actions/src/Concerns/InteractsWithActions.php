@@ -4,6 +4,7 @@ namespace Filament\Actions\Concerns;
 
 use Closure;
 use Filament\Actions\Action;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Support\Exceptions\Cancel;
@@ -12,12 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use Livewire\Attributes\Url;
-use Throwable;
 
 use function Livewire\store;
 
 /**
- * @property Form $mountedActionForm
+ * @property Forms\Form $mountedActionForm
  */
 trait InteractsWithActions
 {
@@ -72,28 +72,22 @@ trait InteractsWithActions
 
         $action->mergeArguments($arguments);
 
-        $form = $this->getMountedActionForm(mountedAction: $action);
+        $form = $this->getMountedActionForm();
 
         $result = null;
 
         $originallyMountedActions = $this->mountedActions;
 
         try {
-            $action->beginDatabaseTransaction();
-
-            if ($this->mountedActionHasForm(mountedAction: $action)) {
+            if ($this->mountedActionHasForm()) {
                 $action->callBeforeFormValidated();
 
-                $form->getState(afterValidate: function (array $state) use ($action) {
-                    $action->callAfterFormValidated();
+                $action->formData($form->getState());
 
-                    $action->formData($state);
-
-                    $action->callBefore();
-                });
-            } else {
-                $action->callBefore();
+                $action->callAfterFormValidated();
             }
+
+            $action->callBefore();
 
             $result = $action->call([
                 'form' => $form,
@@ -102,31 +96,16 @@ trait InteractsWithActions
             $result = $action->callAfter() ?? $result;
 
             $this->afterActionCalled();
-
-            $action->commitDatabaseTransaction();
         } catch (Halt $exception) {
-            $exception->shouldRollbackDatabaseTransaction() ?
-                $action->rollBackDatabaseTransaction() :
-                $action->commitDatabaseTransaction();
-
             return null;
         } catch (Cancel $exception) {
-            $exception->shouldRollbackDatabaseTransaction() ?
-                $action->rollBackDatabaseTransaction() :
-                $action->commitDatabaseTransaction();
         } catch (ValidationException $exception) {
-            $action->rollBackDatabaseTransaction();
-
-            if (! $this->mountedActionShouldOpenModal(mountedAction: $action)) {
+            if (! $this->mountedActionShouldOpenModal()) {
                 $action->resetArguments();
                 $action->resetFormData();
 
                 $this->unmountAction();
             }
-
-            throw $exception;
-        } catch (Throwable $exception) {
-            $action->rollBackDatabaseTransaction();
 
             throw $exception;
         }
@@ -178,17 +157,17 @@ trait InteractsWithActions
             return null;
         }
 
-        $this->cacheMountedActionForm(mountedAction: $action);
+        $this->cacheMountedActionForm();
 
         try {
-            $hasForm = $this->mountedActionHasForm(mountedAction: $action);
+            $hasForm = $this->mountedActionHasForm();
 
             if ($hasForm) {
                 $action->callBeforeFormFilled();
             }
 
             $action->mount([
-                'form' => $this->getMountedActionForm(mountedAction: $action),
+                'form' => $this->getMountedActionForm(),
             ]);
 
             if ($hasForm) {
@@ -202,7 +181,7 @@ trait InteractsWithActions
             return null;
         }
 
-        if (! $this->mountedActionShouldOpenModal(mountedAction: $action)) {
+        if (! $this->mountedActionShouldOpenModal()) {
             return $this->callMountedAction();
         }
 
@@ -222,16 +201,25 @@ trait InteractsWithActions
         $this->mountAction($name, $arguments);
     }
 
-    public function mountedActionShouldOpenModal(?Action $mountedAction = null): bool
+    public function mountedActionShouldOpenModal(): bool
     {
-        return ($mountedAction ?? $this->getMountedAction())->shouldOpenModal(
-            checkForFormUsing: $this->mountedActionHasForm(...),
-        );
+        $action = $this->getMountedAction();
+
+        if ($action->isModalHidden()) {
+            return false;
+        }
+
+        return $action->hasCustomModalHeading() ||
+            $action->hasModalDescription() ||
+            $action->hasModalContent() ||
+            $action->hasModalContentFooter() ||
+            $action->getInfolist() ||
+            $this->mountedActionHasForm();
     }
 
-    public function mountedActionHasForm(?Action $mountedAction = null): bool
+    public function mountedActionHasForm(): bool
     {
-        return (bool) count($this->getMountedActionForm(mountedAction: $mountedAction)?->getComponents() ?? []);
+        return (bool) count($this->getMountedActionForm()?->getComponents() ?? []);
     }
 
     public function cacheAction(Action $action): Action
@@ -275,11 +263,11 @@ trait InteractsWithActions
         ];
     }
 
-    public function getMountedActionForm(?Action $mountedAction = null): ?Form
+    public function getMountedActionForm(): ?Forms\Form
     {
-        $mountedAction ??= $this->getMountedAction();
+        $action = $this->getMountedAction();
 
-        if (! $mountedAction) {
+        if (! $action) {
             return null;
         }
 
@@ -287,10 +275,10 @@ trait InteractsWithActions
             return $this->getForm('mountedActionForm');
         }
 
-        return $mountedAction->getForm(
+        return $action->getForm(
             $this->makeForm()
                 ->statePath('mountedActionsData.' . array_key_last($this->mountedActionsData))
-                ->model($mountedAction->getRecord() ?? $mountedAction->getModel() ?? $this->getMountedActionFormModel())
+                ->model($action->getRecord() ?? $action->getModel() ?? $this->getMountedActionFormModel())
                 ->operation(implode('.', $this->mountedActions)),
         );
     }
@@ -445,11 +433,11 @@ trait InteractsWithActions
         $this->openActionModal();
     }
 
-    protected function cacheMountedActionForm(?Action $mountedAction = null): void
+    protected function cacheMountedActionForm(): void
     {
         $this->cacheForm(
             'mountedActionForm',
-            fn () => $this->getMountedActionForm($mountedAction),
+            fn () => $this->getMountedActionForm(),
         );
     }
 

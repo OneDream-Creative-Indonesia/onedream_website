@@ -34,9 +34,9 @@ abstract class Importer
      * @param  array<string, mixed>  $options
      */
     public function __construct(
-        protected Import $import,
-        protected array $columnMap,
-        protected array $options,
+        readonly protected Import $import,
+        readonly protected array $columnMap,
+        readonly protected array $options,
     ) {
     }
 
@@ -72,6 +72,8 @@ abstract class Importer
         $this->saveRecord();
         $this->callHook('afterSave');
         $this->callHook($recordExists ? 'afterUpdate' : 'afterCreate');
+
+        $this->import->increment('successful_rows');
     }
 
     public function remapData(): void
@@ -80,12 +82,7 @@ abstract class Importer
 
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
-            $rowColumnName = $this->columnMap[$columnName];
+            $rowColumnName = $this->columnMap[$columnName] ?? null;
 
             if (! array_key_exists($rowColumnName, $this->data)) {
                 continue;
@@ -146,10 +143,6 @@ abstract class Importer
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
 
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
             $rules[$columnName] = $column->getDataValidationRules();
 
             if (
@@ -179,19 +172,13 @@ abstract class Importer
         $attributes = [];
 
         foreach ($this->getCachedColumns() as $column) {
-            $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
             $validationAttribute = $column->getValidationAttribute();
 
             if (blank($validationAttribute)) {
                 continue;
             }
 
-            $attributes[$columnName] = $validationAttribute;
+            $attributes[$column->getName()] = $validationAttribute;
         }
 
         return $attributes;
@@ -201,10 +188,6 @@ abstract class Importer
     {
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
 
             if (! array_key_exists($columnName, $this->data)) {
                 continue;
@@ -250,22 +233,17 @@ abstract class Importer
 
     abstract public static function getCompletedNotificationBody(Import $import): string;
 
-    public static function getCompletedNotificationTitle(Import $import): string
-    {
-        return __('filament-actions::import.notifications.completed.title');
-    }
-
     /**
      * @return array<int, object>
      */
     public function getJobMiddleware(): array
     {
         return [
-            (new WithoutOverlapping("import{$this->import->getKey()}"))->expireAfter(600),
+            (new WithoutOverlapping("import{$this->import->id}"))->expireAfter(600),
         ];
     }
 
-    public function getJobRetryUntil(): ?CarbonInterface
+    public function getJobRetryUntil(): CarbonInterface
     {
         return now()->addDay();
     }
@@ -275,22 +253,7 @@ abstract class Importer
      */
     public function getJobTags(): array
     {
-        return ["import{$this->import->getKey()}"];
-    }
-
-    public function getJobQueue(): ?string
-    {
-        return null;
-    }
-
-    public function getJobConnection(): ?string
-    {
-        return null;
-    }
-
-    public function getJobBatchName(): ?string
-    {
-        return null;
+        return ["import{$this->import->id}"];
     }
 
     /**

@@ -66,8 +66,6 @@ abstract class Resource
 
     protected static ?string $model = null;
 
-    protected static ?string $navigationBadgeTooltip = null;
-
     protected static ?string $navigationGroup = null;
 
     protected static ?string $navigationParentItem = null;
@@ -169,7 +167,6 @@ abstract class Resource
                 ->activeIcon(static::getActiveNavigationIcon())
                 ->isActiveWhen(fn () => request()->routeIs(static::getRouteBaseName() . '.*'))
                 ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
-                ->badgeTooltip(static::getNavigationBadgeTooltip())
                 ->sort(static::getNavigationSort())
                 ->url(static::getNavigationUrl()),
         ];
@@ -613,8 +610,13 @@ abstract class Resource
 
     public static function routes(Panel $panel): void
     {
-        Route::name(static::getRelativeRouteName() . '.')
-            ->prefix(static::getRoutePrefix())
+        $slug = static::getSlug();
+        $routeBaseName = (string) str($slug)
+            ->replace('/', '.')
+            ->append('.');
+
+        Route::name($routeBaseName)
+            ->prefix($slug)
             ->middleware(static::getRouteMiddleware($panel))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($panel))
             ->group(function () use ($panel) {
@@ -622,16 +624,6 @@ abstract class Resource
                     $page->registerRoute($panel)?->name($name);
                 }
             });
-    }
-
-    public static function getRelativeRouteName(): string
-    {
-        return (string) str(static::getSlug())->replace('/', '.');
-    }
-
-    public static function getRoutePrefix(): string
-    {
-        return static::getSlug();
     }
 
     /**
@@ -804,7 +796,7 @@ abstract class Resource
         static::$navigationParentItem = $item;
     }
 
-    public static function getNavigationIcon(): string | Htmlable | null
+    public static function getNavigationIcon(): ?string
     {
         return static::$navigationIcon;
     }
@@ -814,7 +806,7 @@ abstract class Resource
         static::$navigationIcon = $icon;
     }
 
-    public static function getActiveNavigationIcon(): string | Htmlable | null
+    public static function getActiveNavigationIcon(): ?string
     {
         return static::$activeNavigationIcon ?? static::getNavigationIcon();
     }
@@ -827,11 +819,6 @@ abstract class Resource
     public static function getNavigationBadge(): ?string
     {
         return null;
-    }
-
-    public static function getNavigationBadgeTooltip(): ?string
-    {
-        return static::$navigationBadgeTooltip;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Filament\Forms\Components\Concerns;
 
 use Closure;
-use Filament\Forms\Components\Contracts\CanBeLengthConstrained;
 use Filament\Forms\Components\Contracts\HasNestedRecursiveValidationRules;
 use Filament\Forms\Components\Field;
 use Illuminate\Contracts\Support\Arrayable;
@@ -328,11 +327,6 @@ trait CanBeValidated
         return $this->multiFieldValueComparisonRule('required_if', $statePath, $stateValues, $isStatePathAbsolute);
     }
 
-    public function requiredIfAccepted(string | Closure $statePath, bool $isStatePathAbsolute = false): static
-    {
-        return $this->fieldComparisonRule('required_if_accepted', $statePath, $isStatePathAbsolute);
-    }
-
     public function requiredUnless(string | Closure $statePath, mixed $stateValues, bool $isStatePathAbsolute = false): static
     {
         return $this->multiFieldValueComparisonRule('required_unless', $statePath, $stateValues, $isStatePathAbsolute);
@@ -406,13 +400,6 @@ trait CanBeValidated
         return $this;
     }
 
-    public function ulid(bool | Closure $condition = true): static
-    {
-        $this->rule('ulid', $condition);
-
-        return $this;
-    }
-
     public function uuid(bool | Closure $condition = true): static
     {
         $this->rule('uuid', $condition);
@@ -431,19 +418,10 @@ trait CanBeValidated
     }
 
     /**
-     * @param  string | array<mixed> | Closure  $rules
+     * @param  string | array<mixed>  $rules
      */
-    public function rules(string | array | Closure $rules, bool | Closure $condition = true): static
+    public function rules(string | array $rules, bool | Closure $condition = true): static
     {
-        if ($rules instanceof Closure) {
-            $this->rules = [
-                ...$this->rules,
-                [$rules, $condition],
-            ];
-
-            return $this;
-        }
-
         if (is_string($rules)) {
             $rules = explode('|', $rules);
         }
@@ -670,7 +648,6 @@ trait CanBeValidated
     {
         $rules = [
             $this->getRequiredValidationRule(),
-            ...($this instanceof CanBeLengthConstrained ? $this->getLengthValidationRules() : []),
         ];
 
         if (filled($regexPattern = $this->getRegexPattern())) {
@@ -680,26 +657,9 @@ trait CanBeValidated
         foreach ($this->rules as [$rule, $condition]) {
             if (is_numeric($rule)) {
                 $rules[] = $this->evaluate($condition);
-
-                continue;
+            } elseif ($this->evaluate($condition)) {
+                $rules[] = $this->evaluate($rule);
             }
-
-            if (! $this->evaluate($condition)) {
-                continue;
-            }
-
-            $rule = $this->evaluate($rule);
-
-            if (is_array($rule)) {
-                $rules = [
-                    ...$rules,
-                    ...$rule,
-                ];
-
-                continue;
-            }
-
-            $rules[] = $rule;
         }
 
         return $rules;
@@ -841,8 +801,6 @@ trait CanBeValidated
 
             if (is_array($stateValues)) {
                 $stateValues = implode(',', $stateValues);
-            } elseif (is_bool($stateValues)) {
-                $stateValues = $stateValues ? 'true' : 'false';
             }
 
             return "{$rule}:{$statePath},{$stateValues}";

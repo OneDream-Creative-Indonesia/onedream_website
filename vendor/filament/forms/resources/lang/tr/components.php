@@ -345,7 +345,7 @@ return [
                         ],
 
                         'create_another' => [
-                            'label' => 'Oluştur & yeni oluştur',
+                            'label' => 'Oluştur & başka bir tane oluştur',
                         ],
 
                     ],

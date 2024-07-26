@@ -19,8 +19,6 @@ trait HasTenancy
 
     protected ?string $tenantRoutePrefix = null;
 
-    protected ?string $tenantDomain = null;
-
     protected ?string $tenantModel = null;
 
     protected ?string $tenantProfilePage = null;
@@ -77,13 +75,6 @@ trait HasTenancy
     public function tenantRoutePrefix(?string $prefix): static
     {
         $this->tenantRoutePrefix = $prefix;
-
-        return $this;
-    }
-
-    public function tenantDomain(?string $domain): static
-    {
-        $this->tenantDomain = $domain;
 
         return $this;
     }
@@ -149,16 +140,6 @@ trait HasTenancy
     public function getTenantRoutePrefix(): ?string
     {
         return $this->tenantRoutePrefix;
-    }
-
-    public function hasTenantDomain(): bool
-    {
-        return filled($this->getTenantDomain());
-    }
-
-    public function getTenantDomain(): ?string
-    {
-        return $this->tenantDomain;
     }
 
     public function getTenantBillingProvider(): ?BillingProvider

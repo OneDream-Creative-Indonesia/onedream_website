@@ -139,7 +139,7 @@ class TestsActions
 
     public function assertTableActionExists(): Closure
     {
-        return function (string | array $name, ?Closure $checkActionUsing = null, $record = null): static {
+        return function (string | array $name): static {
             $name = $this->parseNestedActionName($name);
 
             $action = $this->instance()->getTable()->getAction($name);
@@ -153,28 +153,13 @@ class TestsActions
                 message: "Failed asserting that a table action with name [{$prettyName}] exists on the [{$livewireClass}] component.",
             );
 
-            if ($record) {
-                if (! ($record instanceof Model)) {
-                    $record = $this->instance()->getTableRecord($record);
-                }
-
-                $action->record($record);
-            }
-
-            if ($checkActionUsing) {
-                Assert::assertTrue(
-                    $checkActionUsing($action),
-                    message: "Failed asserting that a table action with name [{$prettyName}] and provided configuration exists on the [{$livewireClass}] component"
-                );
-            }
-
             return $this;
         };
     }
 
     public function assertTableActionDoesNotExist(): Closure
     {
-        return function (string | array $name, ?Closure $checkActionUsing = null, $record = null): static {
+        return function (string | array $name): static {
             $name = $this->parseNestedActionName($name);
 
             $action = $this->instance()->getTable()->getAction($name);
@@ -182,26 +167,10 @@ class TestsActions
             $livewireClass = $this->instance()::class;
             $prettyName = implode(' > ', $name);
 
-            if (! $action) {
-                Assert::assertNull($action);
-
-                return $this;
-            }
-
-            if ($record) {
-                if (! ($record instanceof Model)) {
-                    $record = $this->instance()->getTableRecord($record);
-                }
-
-                $action->record($record);
-            }
-
-            if ($checkActionUsing) {
-                Assert::assertFalse(
-                    $checkActionUsing($action),
-                    "Failed asserting that a table action with name [{$prettyName}] and provided configuration does not exist on the [{$livewireClass}] component.",
-                );
-            }
+            Assert::assertNull(
+                $action,
+                message: "Failed asserting that a table action with name [{$prettyName}] does not exist on the [{$livewireClass}] component.",
+            );
 
             return $this;
         };

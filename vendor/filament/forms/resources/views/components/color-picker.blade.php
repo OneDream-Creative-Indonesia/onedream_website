@@ -2,12 +2,10 @@
     use Filament\Support\Facades\FilamentView;
 
     $isDisabled = $isDisabled();
-    $isLive = $isLive();
     $isLiveOnBlur = $isLiveOnBlur();
     $isLiveDebounced = $isLiveDebounced();
     $isPrefixInline = $isPrefixInline();
     $isSuffixInline = $isSuffixInline();
-    $liveDebounce = $getLiveDebounce();
     $prefixActions = $getPrefixActions();
     $prefixIcon = $getPrefixIcon();
     $prefixLabel = $getPrefixLabel();
@@ -51,11 +49,9 @@
             x-data="colorPickerFormComponent({
                         isAutofocused: @js($isAutofocused()),
                         isDisabled: @js($isDisabled),
-                        isLive: @js($isLive),
                         isLiveDebounced: @js($isLiveDebounced),
                         isLiveOnBlur: @js($isLiveOnBlur),
-                        liveDebounce: @js($liveDebounce),
-                        state: $wire.$entangle('{{ $statePath }}'),
+                        state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')", isOptimisticallyLive: false) }},
                     })"
             x-on:keydown.esc="isOpen() && $event.stopPropagation()"
             {{ $getExtraAlpineAttributeBag()->class(['flex']) }}
@@ -75,8 +71,8 @@
                             'placeholder' => $getPlaceholder(),
                             'required' => $isRequired() && (! $isConcealed()),
                             'type' => 'text',
-                            'x-model' . ($isLiveDebounced ? '.debounce.' . $liveDebounce : null) => 'state',
-                            'x-on:blur' => $isLiveOnBlur ? 'isOpen() ? null : commitState()' : null,
+                            'x-model' . ($isLiveDebounced ? '.debounce.' . $getLiveDebounce() : null) => 'state',
+                            'x-on:blur' => $isLiveOnBlur ? 'isOpen() ? null : $wire.call(\'$refresh\')' : null,
                         ], escape: false)
                 "
             />

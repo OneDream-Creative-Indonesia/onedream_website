@@ -20,13 +20,7 @@ trait BelongsToModel
         foreach ($this->getComponents(withHidden: true) as $component) {
             $component->saveRelationshipsBeforeChildren();
 
-            $shouldSaveRelationshipsWhenDisabled = $component->shouldSaveRelationshipsWhenDisabled();
-
             foreach ($component->getChildComponentContainers(withHidden: $component->shouldSaveRelationshipsWhenHidden()) as $container) {
-                if ((! $shouldSaveRelationshipsWhenDisabled) && $container->isDisabled()) {
-                    continue;
-                }
-
                 $container->saveRelationships();
             }
 

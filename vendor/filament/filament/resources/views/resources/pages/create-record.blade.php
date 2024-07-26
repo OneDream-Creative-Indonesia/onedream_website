@@ -5,7 +5,6 @@
     ])
 >
     <x-filament-panels::form
-        id="form"
         :wire:key="$this->getId() . '.forms.' . $this->getFormStatePath()"
         wire:submit="create"
     >
@@ -16,6 +15,4 @@
             :full-width="$this->hasFullWidthFormActions()"
         />
     </x-filament-panels::form>
-
-    <x-filament-panels::page.unsaved-data-changes-alert />
 </x-filament-panels::page>

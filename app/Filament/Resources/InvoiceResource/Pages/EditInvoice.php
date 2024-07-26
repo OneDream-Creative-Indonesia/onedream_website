@@ -57,7 +57,7 @@ class EditInvoice extends EditRecord
                     ->hidden(fn ($get) => $get('invoice_type') !== 'masuk')
                     ->required(),
             ])->collapsible()->collapsed(),
-        
+
         // Invoice Items Section
         Forms\Components\Section::make('Item Invoice')
             ->schema([
@@ -74,14 +74,14 @@ class EditInvoice extends EditRecord
                         Forms\Components\TextInput::make('price')
                             ->label('Harga')
                             ->required()
-                            ->formatStateUsing(fn($state) => number_format((float) $state, 0, ',', '.')),
+                            ->currencyMask(thousandSeparator: ',', decimalSeparator: '.'),
                     ]),
             ])->collapsible()->collapsed(),
 
             Forms\Components\Section::make('Info Pembayaran')
             ->schema([
                 Forms\Components\Select::make('bank_detail_id')->label('Info Pembayaran')->required()
-                    ->relationship('bankDetail', 'id') 
+                    ->relationship('bankDetail', 'id')
                     ->options(BankDetail::pluck('id')->mapWithKeys(function ($id) {
                             $bankDetail = BankDetail::find($id);
                             $label = "{$bankDetail->bank} - {$bankDetail->cabang} - {$bankDetail->no_rek} - {$bankDetail->owner_rek}";
@@ -106,15 +106,15 @@ class EditInvoice extends EditRecord
                         $latestBankDetailId = BankDetail::first();
                         if ($latestBankDetailId) {
                             return $latestBankDetailId->id;
-                        } 
+                        }
                         return null;
-                    
+
                     })->createOptionUsing(function ($data) {
                         $bankDetail = new BankDetail($data);
                         $bankDetail->save();
                         return $bankDetail->id;
                     }),
-            ])->collapsible()->collapsed(), 
+            ])->collapsible()->collapsed(),
         ]);
     }
     protected function getRedirectUrl(): string

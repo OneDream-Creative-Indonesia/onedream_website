@@ -15,8 +15,6 @@ trait BelongsToModel
 
     protected ?Closure $saveRelationshipsBeforeChildrenUsing = null;
 
-    protected bool | Closure $shouldSaveRelationshipsWhenDisabled = false;
-
     protected bool | Closure $shouldSaveRelationshipsWhenHidden = false;
 
     public function model(Model | string | Closure | null $model = null): static
@@ -38,10 +36,6 @@ trait BelongsToModel
             return;
         }
 
-        if ((! $this->shouldSaveRelationshipsWhenDisabled()) && $this->isDisabled()) {
-            return;
-        }
-
         if ((! $this->shouldSaveRelationshipsWhenHidden()) && $this->isHidden()) {
             return;
         }
@@ -58,10 +52,6 @@ trait BelongsToModel
         }
 
         if (! ($this->getRecord()?->exists)) {
-            return;
-        }
-
-        if ((! $this->shouldSaveRelationshipsWhenDisabled()) && $this->isDisabled()) {
             return;
         }
 
@@ -109,18 +99,6 @@ trait BelongsToModel
         $this->saveRelationshipsBeforeChildrenUsing = $callback;
 
         return $this;
-    }
-
-    public function saveRelationshipsWhenDisabled(bool | Closure $condition = true): static
-    {
-        $this->shouldSaveRelationshipsWhenDisabled = $condition;
-
-        return $this;
-    }
-
-    public function shouldSaveRelationshipsWhenDisabled(): bool
-    {
-        return (bool) $this->evaluate($this->shouldSaveRelationshipsWhenDisabled);
     }
 
     public function saveRelationshipsWhenHidden(bool | Closure $condition = true): static

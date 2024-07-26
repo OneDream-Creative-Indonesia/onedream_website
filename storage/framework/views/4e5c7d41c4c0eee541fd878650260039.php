@@ -36,13 +36,13 @@
 <?php unset($__componentOriginale77d85bd24d039fa58cc32119f1d9bc5); ?>
 <?php endif; ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_BEFORE, scopes: $this->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::resource.pages.list-records.table.before', scopes: $this->getRenderHookScopes())); ?>
 
 
         <?php echo e($this->table); ?>
 
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_AFTER, scopes: $this->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::resource.pages.list-records.table.after', scopes: $this->getRenderHookScopes())); ?>
 
     </div>
  <?php echo $__env->renderComponent(); ?>

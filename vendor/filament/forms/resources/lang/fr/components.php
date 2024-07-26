@@ -183,13 +183,13 @@ return [
                     'label' => 'Libre',
                 ],
 
-            ],
+                'svg' => [
 
-            'svg' => [
+                    'messages' => [
+                        'confirmation' => 'La modification des fichiers SVG n\'est pas recommandée car elle peut entraîner une perte de qualité lors de la mise à l\'échelle.\n Êtes-vous sûr de vouloir continuer ?',
+                        'disabled' => 'La modification des fichiers SVG est désactivée car elle peut entraîner une perte de qualité lors de la mise à l\'échelle.',
+                    ],
 
-                'messages' => [
-                    'confirmation' => 'La modification des fichiers SVG n\'est pas recommandée car elle peut entraîner une perte de qualité lors de la mise à l\'échelle.\n Êtes-vous sûr de vouloir continuer ?',
-                    'disabled' => 'La modification des fichiers SVG est désactivée car elle peut entraîner une perte de qualité lors de la mise à l\'échelle.',
                 ],
 
             ],
@@ -417,31 +417,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Nouveau tag',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Masquer le mot de passe',
-            ],
-
-            'show_password' => [
-                'label' => 'Montrer le mot de passe',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Oui',
-            'false' => 'Non',
-        ],
-
     ],
 
     'wizard' => [

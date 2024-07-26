@@ -56,7 +56,7 @@
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
         <h1
-            class="fi-header-heading text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl"
+            class="fi-header-heading text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl dark:text-white"
         >
             <?php echo e($heading); ?>
 
@@ -72,7 +72,7 @@
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     </div>
 
-    <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::PAGE_HEADER_ACTIONS_BEFORE, scopes: $this->getRenderHookScopes())); ?>
+    <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::page.header.actions.before', scopes: $this->getRenderHookScopes())); ?>
 
 
     <!--[if BLOCK]><![endif]--><?php if($actions): ?>
@@ -104,7 +104,7 @@
 <?php endif; ?>
     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-    <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::PAGE_HEADER_ACTIONS_AFTER, scopes: $this->getRenderHookScopes())); ?>
+    <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::page.header.actions.after', scopes: $this->getRenderHookScopes())); ?>
 
 </header>
 <?php /**PATH C:\xampp\htdocs\onedream_website\vendor\filament\filament\src\/../resources/views/components/header/index.blade.php ENDPATH**/ ?>

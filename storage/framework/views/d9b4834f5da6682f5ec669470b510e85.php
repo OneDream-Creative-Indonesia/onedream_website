@@ -48,27 +48,25 @@
     }
 ?>
 
-<!--[if BLOCK]><![endif]--><?php if($actions): ?>
-    <div
-        <?php echo e($attributes->class([
-                'fi-ta-actions flex shrink-0 items-center gap-3',
-                'flex-wrap' => $wrap,
-                'sm:flex-nowrap' => $wrap === '-sm',
-                match ($alignment) {
-                    Alignment::Center => 'justify-center',
-                    Alignment::Start, Alignment::Left => 'justify-start',
-                    Alignment::End, Alignment::Right => 'justify-end',
-                    Alignment::Between, Alignment::Justify => 'justify-between',
-                    'start md:end' => 'justify-start md:justify-end',
-                    default => $alignment,
-                },
-            ])); ?>
+<div
+    <?php echo e($attributes->class([
+            'fi-ta-actions flex shrink-0 items-center gap-3',
+            'flex-wrap' => $wrap,
+            'sm:flex-nowrap' => $wrap === '-sm',
+            match ($alignment) {
+                Alignment::Center => 'justify-center',
+                Alignment::Start, Alignment::Left => 'justify-start',
+                Alignment::End, Alignment::Right => 'justify-end',
+                Alignment::Between, Alignment::Justify => 'justify-between',
+                'start md:end' => 'justify-start md:justify-end',
+                default => $alignment,
+            },
+        ])); ?>
 
-    >
-        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $actions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $action): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php echo e($action); ?>
+>
+    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $actions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $action): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php echo e($action); ?>
 
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-    </div>
-<?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+</div>
 <?php /**PATH C:\xampp\htdocs\onedream_website\vendor\filament\tables\src\/../resources/views/components/actions.blade.php ENDPATH**/ ?>

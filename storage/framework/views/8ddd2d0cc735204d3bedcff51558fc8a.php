@@ -3,13 +3,10 @@
 
     $datalistOptions = $getDatalistOptions();
     $extraAlpineAttributes = $getExtraAlpineAttributes();
-    $hasTime = $hasTime();
     $id = $getId();
     $isDisabled = $isDisabled();
     $isPrefixInline = $isPrefixInline();
     $isSuffixInline = $isSuffixInline();
-    $maxDate = $getMaxDate();
-    $minDate = $getMinDate();
     $prefixActions = $getPrefixActions();
     $prefixIcon = $getPrefixIcon();
     $prefixLabel = $getPrefixLabel();
@@ -52,8 +49,8 @@
                             'inlinePrefix' => $isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel)),
                             'inlineSuffix' => $isSuffixInline && (count($suffixActions) || $suffixIcon || filled($suffixLabel)),
                             'list' => $datalistOptions ? $id . '-list' : null,
-                            'max' => $hasTime ? $maxDate : ($maxDate ? \Carbon\Carbon::parse($maxDate)->toDateString() : null),
-                            'min' => $hasTime ? $minDate : ($minDate ? \Carbon\Carbon::parse($minDate)->toDateString() : null),
+                            'max' => $getMaxDate(),
+                            'min' => $getMinDate(),
                             'placeholder' => $getPlaceholder(),
                             'readonly' => $isReadOnly(),
                             'required' => $isRequired() && (! $isConcealed()),
@@ -79,8 +76,8 @@
                             'inlinePrefix' => $isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel)),
                             'inlineSuffix' => $isSuffixInline && (count($suffixActions) || $suffixIcon || filled($suffixLabel)),
                             'list' => $datalistOptions ? $id . '-list' : null,
-                            'max' => $hasTime ? $maxDate : ($maxDate ? \Carbon\Carbon::parse($maxDate)->toDateString() : null),
-                            'min' => $hasTime ? $minDate : ($minDate ? \Carbon\Carbon::parse($minDate)->toDateString() : null),
+                            'max' => $getMaxDate(),
+                            'min' => $getMinDate(),
                             'placeholder' => $getPlaceholder(),
                             'readonly' => $isReadOnly(),
                             'required' => $isRequired() && (! $isConcealed()),
@@ -114,7 +111,7 @@
                                 '<?php echo e(convert_date_format($getDisplayFormat())->to('day.js')); ?>',
                             firstDayOfWeek: <?php echo e($getFirstDayOfWeek()); ?>,
                             isAutofocused: <?php echo \Illuminate\Support\Js::from($isAutofocused())->toHtml() ?>,
-                            locale: <?php echo \Illuminate\Support\Js::from($getLocale())->toHtml() ?>,
+                            locale: <?php echo \Illuminate\Support\Js::from(app()->getLocale())->toHtml() ?>,
                             shouldCloseOnDateSelection: <?php echo \Illuminate\Support\Js::from($shouldCloseOnDateSelection())->toHtml() ?>,
                             state: $wire.<?php echo e($applyStateBindingModifiers("\$entangle('{$statePath}')")); ?>,
                         })"
@@ -125,9 +122,17 @@
                         ->class(['fi-fo-date-time-picker'])); ?>
 
             >
-                <input x-ref="maxDate" type="hidden" value="<?php echo e($maxDate); ?>" />
+                <input
+                    x-ref="maxDate"
+                    type="hidden"
+                    value="<?php echo e($getMaxDate()); ?>"
+                />
 
-                <input x-ref="minDate" type="hidden" value="<?php echo e($minDate); ?>" />
+                <input
+                    x-ref="minDate"
+                    type="hidden"
+                    value="<?php echo e($getMinDate()); ?>"
+                />
 
                 <input
                     x-ref="disabledDates"
@@ -167,7 +172,7 @@
                         x-model="displayText"
                         <?php if($id = $getId()): ?> id="<?php echo e($id); ?>" <?php endif; ?>
                         class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                            'fi-fo-date-time-picker-display-text-input w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 outline-none transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] sm:text-sm sm:leading-6',
+                            'w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 outline-none transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] sm:text-sm sm:leading-6 dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)]',
                         ]); ?>"
                     />
                 </button>
@@ -249,13 +254,11 @@
                                                 focusedDate.date() !== day &&
                                                 ! dayIsDisabled(day),
                                             'bg-gray-50 dark:bg-white/5':
-                                                focusedDate.date() === day &&
-                                                ! dayIsSelected(day) &&
-                                                ! dayIsDisabled(day),
+                                                focusedDate.date() === day && ! dayIsSelected(day),
                                             'text-primary-600 bg-gray-50 dark:bg-white/5 dark:text-primary-400':
                                                 dayIsSelected(day),
                                             'pointer-events-none': dayIsDisabled(day),
-                                            'opacity-50': dayIsDisabled(day),
+                                            'opacity-50': focusedDate.date() !== day && dayIsDisabled(day),
                                         }"
                                         class="rounded-full text-center text-sm leading-loose transition duration-75"
                                     ></div>
@@ -263,7 +266,7 @@
                             </div>
                         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-                        <!--[if BLOCK]><![endif]--><?php if($hasTime): ?>
+                        <!--[if BLOCK]><![endif]--><?php if($hasTime()): ?>
                             <div
                                 class="flex items-center justify-center rtl:flex-row-reverse"
                             >

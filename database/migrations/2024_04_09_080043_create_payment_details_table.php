@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payment_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
-            $table->decimal('total', 65, 2);
+            $table->unsignedBigInteger('total');
             $table->timestamps();
         });
     }

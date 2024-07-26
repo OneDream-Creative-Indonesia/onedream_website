@@ -1,6 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
 <?php foreach($attributes->onlyProps([
-    'disabled' => false,
+    'isDisabled' => false,
+    'isMarkedAsRequired' => true,
     'prefix' => null,
     'required' => false,
     'suffix' => null,
@@ -8,13 +9,15 @@
     $$__key = $$__key ?? $__value;
 } ?>
 <?php $attributes = $attributes->exceptProps([
-    'disabled' => false,
+    'isDisabled' => false,
+    'isMarkedAsRequired' => true,
     'prefix' => null,
     'required' => false,
     'suffix' => null,
 ]); ?>
 <?php foreach (array_filter(([
-    'disabled' => false,
+    'isDisabled' => false,
+    'isMarkedAsRequired' => true,
     'prefix' => null,
     'required' => false,
     'suffix' => null,
@@ -36,7 +39,7 @@
 
     <span class="text-sm font-medium leading-6 text-gray-950 dark:text-white">
         
-        <?php echo e($slot); ?><!--[if BLOCK]><![endif]--><?php if($required && (! $disabled)): ?><sup class="text-danger-600 dark:text-danger-400 font-medium">*</sup>
+        <?php echo e($slot); ?><!--[if BLOCK]><![endif]--><?php if($required && $isMarkedAsRequired && ! $isDisabled): ?><sup class="text-danger-600 dark:text-danger-400 font-medium">*</sup>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     </span>
 

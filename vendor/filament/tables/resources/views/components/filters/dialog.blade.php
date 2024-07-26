@@ -4,7 +4,6 @@
 
 @props([
     'activeFiltersCount' => 0,
-    'applyAction',
     'form',
     'layout',
     'maxHeight' => null,
@@ -15,10 +14,8 @@
 @if (($layout === FiltersLayout::Modal) || $triggerAction->isModalSlideOver())
     <x-filament::modal
         :alignment="$triggerAction->getModalAlignment()"
-        :autofocus="$triggerAction->isModalAutofocused()"
         :close-button="$triggerAction->hasModalCloseButton()"
         :close-by-clicking-away="$triggerAction->isModalClosedByClickingAway()"
-        :close-by-escaping="$triggerAction?->isModalClosedByEscaping()"
         :description="$triggerAction->getModalDescription()"
         :footer-actions="$triggerAction->getVisibleModalFooterActions()"
         :footer-actions-alignment="$triggerAction->getModalFooterActionsAlignment()"
@@ -55,10 +52,6 @@
             {{ $triggerAction->badge($activeFiltersCount) }}
         </x-slot>
 
-        <x-filament-tables::filters
-            :apply-action="$applyAction"
-            :form="$form"
-            class="p-6"
-        />
+        <x-filament-tables::filters :form="$form" class="p-6" />
     </x-filament::dropdown>
 @endif

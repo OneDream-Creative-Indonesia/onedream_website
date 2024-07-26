@@ -112,10 +112,6 @@ return [
 
         'actions' => [
 
-            'apply' => [
-                'label' => 'Filters toepassen',
-            ],
-
             'remove' => [
                 'label' => 'Filter verwijderen',
             ],

@@ -113,10 +113,6 @@ return [
 
         'actions' => [
 
-            'apply' => [
-                'label' => 'Szűrők alkalmazása',
-            ],
-
             'remove' => [
                 'label' => 'Szűrő megszüntetése',
             ],

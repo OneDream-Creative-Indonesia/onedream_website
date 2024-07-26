@@ -1,14 +1,14 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
 <?php foreach($attributes->onlyProps([
-    'livewire' => null,
+    'livewire',
 ]) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
 <?php $attributes = $attributes->exceptProps([
-    'livewire' => null,
+    'livewire',
 ]); ?>
 <?php foreach (array_filter(([
-    'livewire' => null,
+    'livewire',
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
@@ -28,7 +28,7 @@
     ]); ?>"
 >
     <head>
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::HEAD_START, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::head.start')); ?>
 
 
         <meta charset="utf-8" />
@@ -39,17 +39,14 @@
             <link rel="icon" href="<?php echo e($favicon); ?>" />
         <?php endif; ?>
 
-        <?php
-            $title = strip_tags(($livewire ?? null)?->getTitle() ?? '');
-            $brandName = strip_tags(filament()->getBrandName());
-        ?>
-
         <title>
-            <?php echo e(filled($title) ? "{$title} - " : null); ?> <?php echo e($brandName); ?>
+            <?php echo e(filled($title = strip_tags($livewire->getTitle())) ? "{$title} - " : null); ?>
+
+            <?php echo e(filament()->getBrandName()); ?>
 
         </title>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::STYLES_BEFORE, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::styles.before')); ?>
 
 
         <style>
@@ -84,13 +81,12 @@
                 --font-family: '<?php echo filament()->getFontFamily(); ?>';
                 --sidebar-width: <?php echo e(filament()->getSidebarWidth()); ?>;
                 --collapsed-sidebar-width: <?php echo e(filament()->getCollapsedSidebarWidth()); ?>;
-                --default-theme-mode: <?php echo e(filament()->getDefaultThemeMode()->value); ?>;
             }
         </style>
 
         <?php echo $__env->yieldPushContent('styles'); ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::STYLES_AFTER, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::styles.after')); ?>
 
 
         <?php if(! filament()->hasDarkMode()): ?>
@@ -116,21 +112,14 @@
             </script>
         <?php endif; ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::HEAD_END, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::head.end')); ?>
 
     </head>
 
     <body
-        <?php echo e($attributes
-                ->merge(($livewire ?? null)?->getExtraBodyAttributes() ?? [], escape: false)
-                ->class([
-                    'fi-body',
-                    'fi-panel-' . filament()->getId(),
-                    'min-h-screen bg-gray-50 font-normal text-gray-950 antialiased dark:bg-gray-950 dark:text-white',
-                ])); ?>
-
+        class="fi-body min-h-screen bg-gray-50 font-normal text-gray-950 antialiased dark:bg-gray-950 dark:text-white"
     >
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::BODY_START, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::body.start')); ?>
 
 
         <?php echo e($slot); ?>
@@ -153,12 +142,12 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::SCRIPTS_BEFORE, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::scripts.before')); ?>
 
 
         <?php echo \Filament\Support\Facades\FilamentAsset::renderScripts(withCore: true) ?>
 
-        <?php if(filament()->hasBroadcasting() && config('filament.broadcasting.echo')): ?>
+        <?php if(config('filament.broadcasting.echo')): ?>
             <script data-navigate-once>
                 window.Echo = new window.EchoFactory(<?php echo \Illuminate\Support\Js::from(config('filament.broadcasting.echo'))->toHtml() ?>)
 
@@ -168,10 +157,10 @@ if (isset($__slots)) unset($__slots);
 
         <?php echo $__env->yieldPushContent('scripts'); ?>
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::SCRIPTS_AFTER, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::scripts.after')); ?>
 
 
-        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::BODY_END, scopes: $livewire->getRenderHookScopes())); ?>
+        <?php echo e(\Filament\Support\Facades\FilamentView::renderHook('panels::body.end')); ?>
 
     </body>
 </html>

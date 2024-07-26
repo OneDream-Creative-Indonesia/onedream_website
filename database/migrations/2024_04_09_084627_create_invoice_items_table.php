@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
             $table->string('item');
             $table->integer('qty');
-            $table->decimal('price', 65, 2);
-            $table->decimal('subtotal', 65, 2);
+            $table->unsignedBigInteger('price');
+            $table->unsignedBigInteger('subtotal');
             $table->timestamps();
         });
     }

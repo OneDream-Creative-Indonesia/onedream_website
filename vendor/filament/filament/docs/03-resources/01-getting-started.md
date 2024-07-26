@@ -60,6 +60,8 @@ If you'd like to save time, Filament can automatically generate the [form](#reso
 php artisan make:filament-resource Customer --generate
 ```
 
+> If your table contains ENUM columns, the `doctrine/dbal` package we use is unable to scan your table and will crash. Hence, Filament is unable to generate the schema for your resource if it contains an ENUM column. Read more about this issue [here](https://github.com/doctrine/dbal/issues/3819#issuecomment-573419808).
+
 ### Handling soft deletes
 
 By default, you will not be able to interact with deleted records in the app. If you'd like to add functionality to restore, force delete and filter trashed records in your resource, use the `--soft-deletes` flag when generating the resource:
@@ -89,14 +91,6 @@ php artisan make:filament-resource Customer --model-namespace=Custom\\Path\\Mode
 In this example, the model should exist at `Custom\Path\Models\Customer`. Please note the double backslashes `\\` in the command that are required.
 
 Now when [generating the resource](#automatically-generating-forms-and-tables), Filament will be able to locate the model and read the database schema.
-
-### Generating the model, migration and factory at the same name
-
-If you'd like to save time when scaffolding your resources, Filament can also generate the model, migration and factory for the new resource at the same time using the `--model`, `--migration` and `--factory` flags in any combination:
-
-```bash
-php artisan make:filament-resource Customer --model --migration --factory
-```
 
 ## Record titles
 
@@ -273,7 +267,7 @@ public static function getPluralModelLabel(): string
 
 By default, Filament will automatically capitalize each word in the model label, for some parts of the UI. For example, in page titles, the navigation menu, and the breadcrumbs.
 
-If you want to disable this behavior for a resource, you can set `$hasTitleCaseModelLabel` in the resource:
+If you want to disable this behaviour for a resource, you can set `$hasTitleCaseModelLabel` in the resource:
 
 ```php
 protected static bool $hasTitleCaseModelLabel = false;
@@ -309,9 +303,7 @@ protected static ?string $navigationIcon = 'heroicon-o-user-group';
 Alternatively, you may set a dynamic navigation icon in the `getNavigationIcon()` method:
 
 ```php
-use Illuminate\Contracts\Support\Htmlable;
-
-public static function getNavigationIcon(): string | Htmlable | null
+public static function getNavigationIcon(): ?string
 {
     return 'heroicon-o-user-group';
 }
@@ -371,8 +363,6 @@ public static function getNavigationParentItem(): ?string
     return __('filament/navigation.groups.shop.items.products');
 }
 ```
-
-> If you're reaching for a third level of navigation like this, you should consider using [clusters](clusters) instead, which are a logical grouping of resources and [custom pages](../pages), which can share their own separate navigation.
 
 ## Generating URLs to resource pages
 
@@ -515,8 +505,6 @@ public static function getRecordSubNavigation(Page $page): array
 ```
 
 Each item in the sub-navigation can be customized using the [same navigation methods as normal pages](../navigation).
-
-> If you're looking to add sub-navigation to switch *between* entire resources and [custom pages](../pages), you might be looking for [clusters](../clusters), which are used to group these together. The `getRecordSubNavigation()` method is intended to construct a navigation between pages that relate to a particular record *inside* a resource.
 
 ### Sub-navigation position
 

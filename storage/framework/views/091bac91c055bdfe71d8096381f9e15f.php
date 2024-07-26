@@ -50,9 +50,9 @@
     <<?php echo e($sortable ? 'button' : 'span'); ?>
 
         <?php if($sortable): ?>
-            aria-label="<?php echo e(__('filament-tables::table.sorting.fields.column.label')); ?> <?php echo e($sortDirection === 'asc' ? __('filament-tables::table.sorting.fields.direction.options.desc') : __('filament-tables::table.sorting.fields.direction.options.asc')); ?>"
             type="button"
             wire:click="sortTable('<?php echo e($name); ?>')"
+            aria-label="<?php echo e(__('filament-tables::table.sorting.fields.column.label')); ?> <?php echo e($sortDirection === 'asc' ? __('filament-tables::table.sorting.fields.direction.options.desc') : __('filament-tables::table.sorting.fields.direction.options.asc')); ?>"
         <?php endif; ?>
         class="<?php echo \Illuminate\Support\Arr::toCssClasses([
             'group flex w-full items-center gap-x-1',

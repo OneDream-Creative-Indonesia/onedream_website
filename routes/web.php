@@ -36,7 +36,7 @@ Route::get('/service/desain', [ServiceDetail::class, 'desain']);
 
 Route::redirect('/login', '/dashboard')->name('login');
 
-Route::get('/attendances/export', [FinanceReportController::class, 'exportCsv'])->name('finances_reports.export');
+Route::get('/finance/export', [FinanceReportController::class, 'exportCsv'])->name('finances_reports.export');
 Route::get('/ticketing/export', [TickettingReport::class, 'exportCsv'])->name('ticketings_reports.export');
 Route::get('/dashboard/tool-lendings/{id}/edit', [ToolLendingController::class, 'edit'])->name('toolLending.edit');
 Route::get('/invoices/download/{id}', [InvoiceController::class, 'downloadPDF'])->name('invoices.downloadPDF')->middleware('auth');

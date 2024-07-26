@@ -2,7 +2,6 @@
 <?php foreach($attributes->onlyProps([
     'footer' => null,
     'header' => null,
-    'headerGroups' => null,
     'reorderable' => false,
     'reorderAnimationDuration' => 300,
 ]) as $__key => $__value) {
@@ -11,14 +10,12 @@
 <?php $attributes = $attributes->exceptProps([
     'footer' => null,
     'header' => null,
-    'headerGroups' => null,
     'reorderable' => false,
     'reorderAnimationDuration' => 300,
 ]); ?>
 <?php foreach (array_filter(([
     'footer' => null,
     'header' => null,
-    'headerGroups' => null,
     'reorderable' => false,
     'reorderAnimationDuration' => 300,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
@@ -35,15 +32,8 @@
 
 >
     <!--[if BLOCK]><![endif]--><?php if($header): ?>
-        <thead class="divide-y divide-gray-200 dark:divide-white/5">
-            <!--[if BLOCK]><![endif]--><?php if($headerGroups): ?>
-                <tr class="bg-gray-100 dark:bg-transparent">
-                    <?php echo e($headerGroups); ?>
-
-                </tr>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-            <tr class="bg-gray-50 dark:bg-white/5">
+        <thead class="bg-gray-50 dark:bg-white/5">
+            <tr>
                 <?php echo e($header); ?>
 
             </tr>
