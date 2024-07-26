@@ -1,0 +1,34 @@
+# Laravel specific
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/.env
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# PHPUnit
+/.phpunit.cache
+
+# Vite specific
+/public/build
+/public/hot
+
+# Environment specific
+.env
+.env.backup
+.env.production
+auth.json
+
+# IDE specific
+/.idea
+/.vscode
+
+# Additional logs and config
+npm-debug.log
+yarn-error.log
