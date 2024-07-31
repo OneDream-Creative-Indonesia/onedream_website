@@ -20,7 +20,6 @@ yarn-error.log
 /public/hot
 
 # Environment specific
-.env
 .env.backup
 .env.production
 auth.json
