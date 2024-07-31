@@ -77,6 +77,9 @@
     </script>
 </head>
 <body>
+<button class="font-bold text-black bg-blue-500 rounded-full hover:bg-blue-700">
+        <a href="">Cek Log Status Selesai</a>
+    </button>
 <div id="task-container"  class="flex grid flex-wrap justify-around grid-cols-12 md:grid-cols-3 sm:gap-3">
     <div id="todo" class="w-full p-4 dropzone md:w-1/3" data-status="todo">
         <h3 class="w-full mb-2 text-lg font-bold" style="margin-left: 10px; color:  rgb(36, 36, 36);">Dalam Antrian</h3>
