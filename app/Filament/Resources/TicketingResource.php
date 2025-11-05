@@ -41,15 +41,14 @@ class TicketingResource extends Resource
             ->schema([
                 TextInput::make('nama')
                     ->required(),
-                TextInput::make('kelas')
-                    ->required(),
+                TextInput::make('jumlah')
+                    ->required()
+                    ->label("Jumlah Orang"),
                 TextInput::make('telpon')
                     ->label('Nomor Telfon')
                     ->numeric()
                     ->placeholder('08xx-xxxx-xxxx')
                     ->required(),
-                TextInput::make('no_photo')
-                    ->label('Nomor Photo'),
                 Select::make('transaction_type')
                     ->options([
                         'tunai' => "Tunai",
@@ -71,8 +70,8 @@ class TicketingResource extends Resource
                     ->label('name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kelas')
-                    ->label('kelas')
+                Tables\Columns\TextColumn::make('jumlah')
+                    ->label('Jumlah Orang')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telpon')
@@ -83,27 +82,22 @@ class TicketingResource extends Resource
                     ->label('Jenis Pembayaran')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('no_photo')
-                    ->label('Nomor Photo')
-                    ->getStateUsing(fn (Ticketing $record) => $record->no_photo ? $record->no_photo : '-')
-                    ->sortable()
-                    ->searchable(),
             ])
             ->filters([
-                SelectFilter::make('no_photo')
-                ->label('Filter Nomor Photo')
-                ->options([
-                    'with_photo' => 'Nomor Photo Terisi',
-                    'without_photo' => 'Nomor Photo Belum Terisi',
-                ])
-                ->query(function (Builder $query, array $data) {
-                    if ($data['value'] === 'with_photo') {
-                        return $query->whereNotNull('no_photo')->where('no_photo', '!=', '');
-                    }
-                    if ($data['value'] === 'without_photo') {
-                        return $query->whereNull('no_photo')->orWhere('no_photo', '');
-                    }
-                }),
+                // SelectFilter::make('no_photo')
+                // ->label('Filter Nomor Photo')
+                // ->options([
+                //     'with_photo' => 'Nomor Photo Terisi',
+                //     'without_photo' => 'Nomor Photo Belum Terisi',
+                // ])
+                // ->query(function (Builder $query, array $data) {
+                //     if ($data['value'] === 'with_photo') {
+                //         return $query->whereNotNull('no_photo')->where('no_photo', '!=', '');
+                //     }
+                //     if ($data['value'] === 'without_photo') {
+                //         return $query->whereNull('no_photo')->orWhere('no_photo', '');
+                //     }
+                // }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
